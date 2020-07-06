@@ -1,0 +1,40 @@
+#include <iostream>
+#include <string>
+#include <ios>
+#include <iostream>
+#include <iomanip>
+
+using namespace std;
+
+int main() {
+
+	cout << "please enter your first name! : ";
+	string name;
+	cin >> name;
+	cout << "Hello, " << name << "!" << endl;
+
+	cout << "please enter your midterm and final exam grades : ";
+	double midterm, final;
+	cin >> midterm >> final;
+
+	cout << "Enter all your homework grades, "
+		"followed by end-of-file: ";
+
+	int count = 0;
+	double sum = 0;
+
+	double x;
+
+	while (cin >> x) {
+		++count;
+		sum += x;
+	}
+
+	streamsize prec = cout.precision();
+	cout << "your final grade is " << setprecision(3) //소수점 3번째자리까지 조절
+		<< 0.2*midterm + 0.4*final + 0.4*sum / count
+		<< setprecision(prec) << endl;
+
+	return 0;
+
+}
