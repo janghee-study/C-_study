@@ -1,0 +1,46 @@
+#include <iostream>
+#include <cstdlib>
+#include <random>
+
+using namespace std;
+
+int main() {
+	
+	int input;
+	cin >> input;
+	int count=input;
+	int value = (input / 2.0) + 0.5;
+	int plus1 = 1;
+	int plus2 = input-2;
+	int size1 = (input / 2.0) + 0.5;
+
+	while (count > 0) {
+
+		if (count >= value) {
+
+			cout << endl;
+			for (int i = 0; i < size1; i++) {
+				cout << " ";
+			}
+			for (int i = 0; i < plus1; i++) {
+				cout << "*";
+			}
+			size1 -= 1;
+			plus1 += 2;
+		}
+		else {
+			
+			cout << endl;
+			for (int i = 0; i <= size1+1; i++) {
+				cout << " ";
+			}
+			for (int i = 0; i < plus2; i++) {
+				cout << "*";
+			}
+			size1 += 1;
+			plus2 -= 2;
+		}
+		count--;
+	}
+	return 0;
+}
