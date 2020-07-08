@@ -1,0 +1,92 @@
+#include <iostream>
+
+using namespace std;
+int arr[20][20];
+
+int main()
+{
+
+	int input;
+
+	cin >> input;
+
+
+
+	int i = 1;
+	int j = 1;
+	int Startnumber = 1;
+	string state = "right";
+
+	while (Startnumber<input*input+1) {
+
+		
+		if (state == "right") {
+			arr[i][j] = Startnumber;
+			if (arr[i][j+1] != 0) {
+				state = "down";
+				i++;
+			}
+			else if (i == 1 && j == input) {
+				i++;
+				state = "down";
+			}
+			else {
+				j++;
+			}
+		}
+		else if (state == "down") {
+			arr[i][j] = Startnumber;
+			if (arr[i + 1][j] != 0) {
+				state = "left";
+				j--;
+			}
+			else if (i == input && j == input) {
+				j--;
+				state = "left";
+			}
+			else {
+				i++;
+			}
+		}
+		else if (state == "left") {
+			arr[i][j] = Startnumber;
+			if (arr[i][j-1] != 0) {
+				state = "up";
+				i--;
+			}
+			else if (i == input && j == 1) {
+				i--;
+				state = "up";
+			}
+			else {
+				j--;
+			}
+		}
+		else if (state == "up") {
+			arr[i][j] = Startnumber;
+			if (arr[i-1][j] != 0) {
+				state = "right";
+				j++;
+			}
+			else if (i == 2 && j == 1) {
+				j++;
+				state = "right";
+			}
+			else {
+				i--;
+			}
+		}
+		else {
+			arr[i][j] = Startnumber;
+		}
+		Startnumber++;
+	}
+
+	for (int i = 1; i <= input ; i++) {
+		cout << endl;
+		for (int j = 1; j <= input ; j++) {
+			cout << " " << arr[i][j];
+		}
+	}
+	return 0;
+}
