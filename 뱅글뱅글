@@ -19,16 +19,11 @@ int main()
 
 	while (Startnumber<input*input+1) {
 
-		
 		if (state == "right") {
 			arr[i][j] = Startnumber;
-			if (arr[i][j+1] != 0) {
+			if (arr[i][j+1] != 0|| (i == 1 && j == input)) {
 				state = "down";
 				i++;
-			}
-			else if (i == 1 && j == input) {
-				i++;
-				state = "down";
 			}
 			else {
 				j++;
@@ -36,13 +31,9 @@ int main()
 		}
 		else if (state == "down") {
 			arr[i][j] = Startnumber;
-			if (arr[i + 1][j] != 0) {
+			if (arr[i + 1][j] != 0||(i == input && j == input)) {
 				state = "left";
 				j--;
-			}
-			else if (i == input && j == input) {
-				j--;
-				state = "left";
 			}
 			else {
 				i++;
@@ -50,13 +41,9 @@ int main()
 		}
 		else if (state == "left") {
 			arr[i][j] = Startnumber;
-			if (arr[i][j-1] != 0) {
+			if (arr[i][j-1] != 0|| (i == input && j == 1)) {
 				state = "up";
 				i--;
-			}
-			else if (i == input && j == 1) {
-				i--;
-				state = "up";
 			}
 			else {
 				j--;
@@ -64,13 +51,9 @@ int main()
 		}
 		else if (state == "up") {
 			arr[i][j] = Startnumber;
-			if (arr[i-1][j] != 0) {
+			if (arr[i - 1][j] != 0 || (i == 2 && j == 1)) {
 				state = "right";
 				j++;
-			}
-			else if (i == 2 && j == 1) {
-				j++;
-				state = "right";
 			}
 			else {
 				i--;
