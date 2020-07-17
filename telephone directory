@@ -1,0 +1,229 @@
+#include <iostream>
+#include <string>
+#include <mysql.h>
+#pragma comment(lib, "libmySQL.lib")
+
+using namespace std;
+
+void finish_with_error(MYSQL* con)
+{
+	fprintf(stderr, "%s\n", mysql_error(con));
+	mysql_close(con);
+	exit(1);
+}
+
+MYSQL* con = mysql_init(NULL);
+
+void makeTBL();
+void insertTBL();
+void inquiryTBL();
+void makeTBL();
+void matchTBL();
+
+int main()
+{
+
+
+	if (con == NULL)
+	{
+		fprintf(stderr, "%s\n", mysql_error(con));
+		exit(1);
+	}
+
+	if (mysql_real_connect(con, "localhost", "root", "jang", NULL, 3306, NULL, 0) == NULL)
+	{
+		fprintf(stderr, "%s\n", mysql_error(con));
+		mysql_close(con);
+		exit(1);
+	}
+
+	int i;
+	while (true) {
+		cout << "------------------------------------------------------------------------------------------------------------------" << endl << endl;
+		cout << "                                               1.테이블 생성" << endl;
+		cout << "                                               2.테이블 삽입" << endl;
+		cout << "                                               3.테이블 조회" << endl;
+		cout << "                                               4.테이블 연결확인" << endl;
+		cout << "                                               5.MYSQL 종료" << endl << endl;
+		cout << "------------------------------------------------------------------------------------------------------------------" << endl << endl;
+		cout << "                                                   ";
+		cin >> i;
+
+		if (i == 1) {
+			makeTBL();
+		}
+		else if (i == 2) {
+			insertTBL();
+		}
+		else if (i == 3) {
+			inquiryTBL();
+		}
+		else if (i == 4) {
+			matchTBL();
+		}
+		else if (i == 5) {
+			break;
+		}
+		mysql_close(con);
+	}
+	return 0;
+}
+
+
+
+//테이블 생성
+void makeTBL() {
+
+	MYSQL* con = mysql_init(NULL);
+
+	string db = "";
+	cout << "데이터베이스 이름을 정하시오" << endl;
+	cin >> db;
+
+	string str = "";
+	cout << "테이블 이름을 정하시오" << endl;
+	cin >> str;
+
+	
+
+	if (mysql_real_connect(con, "localhost", "root", "jang", NULL, 3306, NULL, 0) == NULL)
+	{
+		fprintf(stderr, "%s\n", mysql_error(con));
+		mysql_close(con);
+		exit(1);
+	}
+	string bb = "";
+
+	bb = "create database " + db;
+
+	if (mysql_query(con, bb.c_str()))
+	{
+		fprintf(stderr, "%s\n", mysql_error(con));
+		mysql_close(con);
+		exit(1);
+	}
+
+	db = "use " + db;
+
+	if (mysql_query(con, db.c_str()))
+	{
+		fprintf(stderr, "%s\n", mysql_error(con));
+		mysql_close(con);
+		exit(1);
+	}
+
+	str = "CREATE table " + str + "(id INT AUTO_INCREMENT NOT NULL PRIMARY KEY ,name CHAR(20),phone CHAR(20))";
+	
+	if (mysql_query(con, str.c_str())) {
+		finish_with_error(con);
+	}
+
+}
+
+//테이블 삽입
+void insertTBL() {
+	MYSQL mysql;
+	mysql_init(&mysql);
+	string dbName = "";
+	cout << "넣으려는 데이터베이스 이름을 말하시오" << endl;
+	cin >> dbName;
+
+	string tableName;
+	cout << "넣으려는 테이블 이름을 말하시오 " << endl;
+	cin >> tableName;
+
+	int number;
+	cout << "몇명을 추가하겠는가? " << endl;
+	cin >> number;
+
+	string Name;
+	string phoneNumber;
+
+
+	for (int i = 0; i < number; i++) {
+		cout << "친구이름" << endl;
+		cin >> Name;
+		cout << "친구번호" << endl;
+		cin >> phoneNumber;
+
+		string person = "INSERT INTO "+tableName+" VALUES("+Name+","+phoneNumber+")";
+
+		if (mysql_query(con, dbName.c_str()))
+		{
+			fprintf(stderr, "%s\n", mysql_error(con));
+			mysql_close(con);
+			exit(1);
+		}
+
+		if (mysql_query(con, person.c_str())) {
+			finish_with_error(con);
+		}
+	}
+}
+
+//테이블 조회
+void inquiryTBL() {
+	MYSQL mysql;
+	mysql_init(&mysql);
+	string db = "";
+	cout << "접근할 데이터베이스 이름을 말하시오" << endl;
+	cin >> db;
+
+	string str = "";
+	cout << "접근할 컬럼 이름을 말하시오" << endl;
+	cin >> str;
+
+	string bb = "use " + db;
+	string dd = "SELECT *from " + str;
+
+	if (mysql_query(con, bb.c_str()))
+	{
+		fprintf(stderr, "%s\n", mysql_error(con));
+		mysql_close(con);
+		exit(1);
+	}
+
+
+	if (mysql_query(con, dd.c_str()))
+	{
+		finish_with_error(con);
+	}
+
+	MYSQL_RES* result = mysql_store_result(con);
+
+	if (result == NULL)
+	{
+		finish_with_error(con);
+	}
+
+	int num_fields = mysql_num_fields(result);//이 함수는 유명한 함수임
+
+	MYSQL_ROW row;
+
+	while ((row = mysql_fetch_row(result)))
+	{
+		for (int i = 0; i < num_fields; i++)
+		{
+			printf("%s ", row[i] ? row[i] : "null");
+		}
+		printf("\n");
+	}
+
+	mysql_free_result(result);
+	mysql_close(con);
+}
+
+
+
+//연결종속성확인
+void matchTBL() {
+
+	MYSQL mysql;
+	mysql_init(&mysql);
+	if (!mysql_real_connect(&mysql, "localhost", "root", "jang", "world", 3306, NULL, 0))
+		cout << "error" << endl;
+	else
+		cout << "success" << endl;
+
+	mysql_close(&mysql);
+}
