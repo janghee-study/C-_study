@@ -1,0 +1,164 @@
+use world;
+use sakila;
+use sys;
+
+show tables;
+select *from city;
+select name from city;
+select second() from city;
+select name from city order by name asc;
+select name from city order by name desc;
+
+select name from city order by Population desc;
+select *from city order by Population desc;
+/*주석*/
+select *from city where name='seoul' or name='dubai';
+
+select *from city 
+where Population <=500000
+and Population >=300000
+order by Population desc;
+
+desc city;
+describe city;
+
+desc country;
+/*q1)GNP가 높은 나라이름과 GNP컴럼만 내림차순으로 정렬해주세요.*/
+select *from country order by GNP desc;
+/*q2)평균수평이 가장 큰나라 3개만 출력해 주세요*/
+select *from country order by LifeExpectancy desc limit 3;
+/*q3)인구가 가장 많은 나라를 내림차순으로 정렬해주세요*/
+select Name from country order by Population desc;
+/*q4)가장 최근에 독립한 나라는 이름과 독립년도를 알려주세요*/
+select Name,Indepyear from country order by IndepYear desc limit 1;
+
+/*q5)평균수명이 70~80세인 나라의 독립년도를 내림차순으로 정렬해주세요*/
+select *from country 
+where LifeExpectancy <80
+and LifeExpectancy >=70
+order by IndepYear desc;
+/*q6)seoul의 평균수명을 알려주세요*/
+select name,LifeExpectancy from country where name='Brazil';
+
+
+/*두번째 수업시작!*/
+CREATE DATABASE ABC;
+DROP DATABASE ABC;
+/*DB사용하기*/
+CREATE DATABASE sqldb;
+use sqldb;
+/*테이블만들기*/
+CREATE TABLE student(
+/*이름이 먼저오고 그 다음이 타입이온다*/
+	id CHAR(3),
+    name CHAR(20)
+);
+desc student;
+show tables;
+/*e데이터 입력하기*/
+INSERT INTO student (id, name) VALUES(1, 'HONG-GIL-DONG');
+insert into student (name) value('kim-jang-hee');
+/*확인하기*/
+select *from student;
+/*테이블 삭제하기*/
+drop table student;
+
+
+/*입력할 테이블만들기*/
+CREATE TABLE usertbl -- 회원 테이블
+( userID  	CHAR(8) NOT NULL PRIMARY KEY, -- 사용자 아이디(PK)
+  name    	VARCHAR(10) NOT NULL, -- 이름
+  birthYear   INT NOT NULL,  -- 출생년도
+  addr	  	CHAR(2) NOT NULL, -- 지역(경기,서울,경남 식으로 2글자만입력)
+  mobile1	CHAR(3), -- 휴대폰의 국번(011, 016, 017, 018, 019, 010 등)
+  mobile2	CHAR(8), -- 휴대폰의 나머지 전화번호(하이픈제외)
+  height    	SMALLINT,  -- 키
+  mDate    	DATE  -- 회원 가입일
+);
+/*확인*/
+select *from usertbl;
+/*데이터입력예제 query에서 아래2번째*/
+
+INSERT INTO usertbl VALUES('LSG', '이승기', 1987, '서울', '011', '1111111', 182, '2008-8-8');
+INSERT INTO usertbl VALUES('KBS', '김범수', 1979, '경남', '011', '2222222', 173, '2012-4-4');
+INSERT INTO usertbl VALUES('KKH', '김경호', 1971, '전남', '019', '3333333', 177, '2007-7-7');
+INSERT INTO usertbl VALUES('JYP', '조용필', 1950, '경기', '011', '4444444', 166, '2009-4-4');
+INSERT INTO usertbl VALUES('SSK', '성시경', 1979, '서울', NULL  , NULL      , 186, '2013-12-12');
+INSERT INTO usertbl VALUES('LJB', '임재범', 1963, '서울', '016', '6666666', 182, '2009-9-9');
+INSERT INTO usertbl VALUES('YJS', '윤종신', 1969, '경남', NULL  , NULL      , 170, '2005-5-5');
+INSERT INTO usertbl VALUES('EJW', '은지원', 1972, '경북', '011', '8888888', 174, '2014-3-3');
+INSERT INTO usertbl VALUES('JKW', '조관우', 1965, '경기', '018', '9999999', 172, '2010-10-10');
+INSERT INTO usertbl VALUES('BBK', '바비킴', 1973, '서울', '010', '0000000', 176, '2013-5-5');
+
+select *from usertbl;
+
+CREATE TABLE buytbl -- 회원 구매 테이블(Buy Table의 약자)
+(  num 		INT AUTO_INCREMENT NOT NULL PRIMARY KEY, -- 순번(PK)
+   userID  	CHAR(8) NOT NULL, -- 아이디(FK)
+   prodName 	CHAR(6) NOT NULL, --  물품명
+   groupName 	CHAR(4)  , -- 분류
+   price     	INT  NOT NULL, -- 단가
+   amount    	SMALLINT  NOT NULL, -- 수량
+   FOREIGN KEY (userID) REFERENCES usertbl(userID)
+);
+use sqldb;
+drop tables buytbl;
+drop tables usertbl;
+
+select *from usertbl;
+CREATE TABLE buytbl -- 회원 구매 테이블(Buy Table의 약자)
+(  num 		INT AUTO_INCREMENT NOT NULL PRIMARY KEY, -- 순번(PK)
+   userID  	CHAR(8) NOT NULL, -- 아이디(FK)
+   prodName 	CHAR(6) NOT NULL, --  물품명
+   groupName 	CHAR(4)  , -- 분류
+   price     	INT  NOT NULL, -- 단가
+   amount    	SMALLINT  NOT NULL, -- 수량
+   FOREIGN KEY (userID) REFERENCES usertbl(userID)
+);
+
+INSERT INTO buytbl VALUES(NULL, 'KBS', '운동화', NULL   , 30,   2);
+INSERT INTO buytbl VALUES(NULL, 'KBS', '노트북', '전자', 1000, 1);
+INSERT INTO buytbl VALUES(NULL, 'JYP', '모니터', '전자', 200,  1);
+INSERT INTO buytbl VALUES(NULL, 'BBK', '모니터', '전자', 200,  5);
+INSERT INTO buytbl VALUES(NULL, 'KBS', '청바지', '의류', 50,   3);
+INSERT INTO buytbl VALUES(NULL, 'BBK', '메모리', '전자', 80,  10);
+INSERT INTO buytbl VALUES(NULL, 'SSK', '책'    , '서적', 15,   5);
+INSERT INTO buytbl VALUES(NULL, 'EJW', '책'    , '서적', 15,   2);
+INSERT INTO buytbl VALUES(NULL, 'EJW', '청바지', '의류', 50,   1);
+INSERT INTO buytbl VALUES(NULL, 'BBK', '운동화', NULL   , 30,   2);
+INSERT INTO buytbl VALUES(NULL, 'EJW', '책'    , '서적', 15,   1);
+INSERT INTO buytbl VALUES(NULL, 'BBK', '운동화', NULL   , 30,   2);
+
+select *from usertbl;
+select *from buytbl;
+/*------------------------------------------------*/
+/*between 사이값조건구하기*/
+select name,height from usertbl
+where height between 180 and 183;
+/*IN 해당하는 조건구하기*/
+select name,addr from usertbl
+where addr IN("경남","전북","경기");
+/*지역이 서울또는 경남이면 키가 175 이상인 인물은 ??*/
+
+select name,addr,height from usertbl
+where addr IN("경남","서울")
+and height >=175
+and name LIKE '바%'/*바~~를 찾을 수 있음*/
+and name LIKE '%킴';
+
+/*서브쿼리해결하기!!*/
+/*김경호보다 키가 크거나 같은 사람의 이름과 키 출력*/
+/*orderby는 where뒤에 나올수있음*/
+select name,height from usertbl
+where height>(select height from usertbl where name ="김경호")order by name asc;
+
+/*distinct을 사용해서 중복삭제*/
+select distinct addr from usertbl;
+
+
+
+
+
+
+
+
