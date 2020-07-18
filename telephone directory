@@ -64,7 +64,6 @@ int main()
 		else if (i == 5) {
 			break;
 		}
-		mysql_close(con);
 	}
 	return 0;
 }
@@ -139,21 +138,13 @@ void insertTBL() {
 	string Name;
 	string phoneNumber;
 
-
 	for (int i = 0; i < number; i++) {
 		cout << "친구이름" << endl;
 		cin >> Name;
 		cout << "친구번호" << endl;
 		cin >> phoneNumber;
 
-		string person = "INSERT INTO "+tableName+" VALUES("+Name+","+phoneNumber+")";
-
-		if (mysql_query(con, dbName.c_str()))
-		{
-			fprintf(stderr, "%s\n", mysql_error(con));
-			mysql_close(con);
-			exit(1);
-		}
+		string person = "INSERT INTO "+dbName+"." +tableName+" VALUES(null,'"+Name+"','"+phoneNumber+"')";
 
 		if (mysql_query(con, person.c_str())) {
 			finish_with_error(con);
@@ -222,8 +213,10 @@ void matchTBL() {
 	mysql_init(&mysql);
 	if (!mysql_real_connect(&mysql, "localhost", "root", "jang", "world", 3306, NULL, 0))
 		cout << "error" << endl;
-	else
-		cout << "success" << endl;
-
+	else {
+		cout << "------------------------------------------------------------------------------------------------------------------" << endl;
+		cout << endl << endl << "                                                   success" << endl << endl << endl;
+		cout << "------------------------------------------------------------------------------------------------------------------" << endl;
+	}
 	mysql_close(&mysql);
 }
