@@ -1,0 +1,370 @@
+#-*- coding: utf-8 -*-
+'''
+Created on 2020. 7. 21.
+
+@author: user
+'''
+
+# x= int(input("   ۰     Է  ϼ    : "))
+# money = 9000
+# 
+# if x>=19:
+#     money-=1250
+# elif 18>x and x>13:
+#     money-=1050
+# else:
+#     money-=650
+#     
+# print(돈)
+
+
+# for i in range(5,12,2):
+#     print("hello",i)
+
+# summ = 0
+# for i in range (0,101,3):
+#     print("hello",i)
+#     summ+=i
+# print(summ)
+
+# summ=0
+# for i in range(10,-1,-1):
+#     print("hello",i)
+#     summ+=i
+# print(summ)
+# 
+# summ=0
+# for i in reversed(range(11)):
+#     print("hello",i)
+#     summ+=i
+# print(summ)
+# 
+# a = [0,2,4,7,8,9]
+# a.reverse()
+# print(a)
+# 
+# a = list(range(11))
+# a.reverse()
+# print(a)
+
+
+# peoNumber = int(input("      ž ¿    Դϱ : "))
+# money = 9000
+# 
+# for i in range(peoNumber):
+#     x= int(input(" ̹ ž          ̸   Է  ϼ    : "))
+#     if money<650:
+#         print(" ܾ         մϴ .")
+#         break
+#     if x>=19:
+#         money-=1250
+#     elif 18>x and x>13:
+#         money-=1050
+#     else:
+#         money-=650
+# 
+# print(돈)
+
+
+# a = [10,20,30,40,50]
+# for i in a:
+#     print(i)
+# 
+# for i in 'python':
+#     print(i)
+#     
+# str1 = input("   ڿ     Է : ")
+# a = list(str1)
+# print(a)
+# 
+# 
+# b=[]
+# for i in a:
+#     b.append(i)
+# print(b)
+
+
+# peoNumber = int(input("      ž ¿    Դϱ : "))
+# money = 9000
+#  
+# for i in range(peoNumber):
+#     x= int(input(" ̹ ž          ̸   Է  ϼ    : "))
+#     if money<650:
+#         print(" ܾ         մϴ .")
+#         break
+#     if x>=19:
+#         money-=1250
+#     elif 18>x and x>13:
+#         money-=1050
+#     else:
+#         money-=650
+#  
+# print(돈)
+
+# money=9000
+# b = list(map(int,input("     3      Է  ϼ    : ").split()))
+#  
+# for i in range(len(b)):
+#     if b[i]>=19:
+#         money-=1250
+#     elif 18>b[i] and b[i]>13:
+#         money-=1050
+#     else:
+#         money-=650
+#          
+# if money>0:
+#     print(" ܾ    ",money," Դϴ ")
+# else:
+#     print(" ܾ         մϴ ")
+
+
+# money=9000
+# b = list(map(int,input("     3      Է  ϼ    : ").split()))
+# for i in b:
+#     if i>=19:
+#         money-=1250
+#     elif 18>i and i>13:
+#         money-=1050
+#     else:
+#         money-=650
+#          
+# if money>0:
+#     print(" ܾ    ",money," Դϴ ")
+# else:
+#     print(" ܾ         մϴ ")
+
+
+# for i in range(1,10):
+#     for j in range(1,10):
+#         print(i,"*",j,"=",i*j)
+#     print()
+
+# i=1
+# while i<10:
+#     print("hello",i)
+#     i+=1
+
+
+# i=int(input(" ܼ     Է  Ͻÿ  : "))
+# j=1
+# 
+# while j<10:
+#     print(i,"*",j,"=",i*j)
+#     j+=1
+
+# i=0
+# hap=0
+# while i<101:
+#     hap+=i
+#     i+=2
+#     
+# print(hap)
+
+import random
+
+# i=0
+# while i<=5:
+#     print(random.random())
+#     i+=1
+
+# i=0
+# while i<=5:
+#     print(random.randint(1,6))
+#     i+=1
+
+# i=0
+# while i<=5:
+#     print(random.randrange(1,6))
+#     i+=1
+
+# i=0
+# cnt=0
+# while i!=3:
+#     i = random.randint(1,6)
+#     print(i)
+#     cnt+=1
+# print("ī  Ʈ",cnt)
+
+# money = int(input("   ִ  : "))
+# 
+# while True:
+#     money-=1350
+#     if money<0:
+#         print("       ")
+#         break
+#     else:
+#         print(돈)
+        
+        
+# money = int(input("   ִ  : "))
+# 
+# while money>=1350:
+#     money-=1350
+#     print(돈)
+
+
+# x=y=0
+# for y in reversed(range(5)):
+#     for x in range(5):
+#         if x<=y:
+#             print('*',end='')
+#     print()
+
+# x=y=0
+# for y in range(5):
+#     for x in range(5):
+#         if x<=y:
+#             print('*',end='')
+#     print()
+
+# x=y=0
+# cnt=0
+# x1=5
+# for y in range(6):
+#     for x in range(5-cnt):
+#         print(" ",end='')
+#         pass
+#     for x1 in range(cnt):
+#         print("*",end='')
+#         pass
+#     cnt+=1
+#     print()
+        
+        
+# i=j1=j2=0
+# cnt=1
+# temp=2
+# for i in range(3):
+#     for j1 in range(temp):
+#         print(' ',end='')
+#     
+#     
+#     for j2 in range(cnt):
+#         print('*',end='')
+#         
+#     cnt+=2
+#     temp-=1
+#     print()
+
+# i=j1=j2=0
+# 
+# floorcnt = int(input("몇층?? "))
+# 
+# cnt=1
+# temp=floorcnt-1
+# for i in range(floorcnt):
+#     for j1 in range(temp):
+#         print(' ',end='')
+#     
+#     
+#     for j2 in range(cnt):
+#         print('*',end='')
+#         
+#     cnt+=2
+#     temp-=1
+#     print()
+
+# i=0
+# a = list(map(int,input().split()))
+# 
+# for i in range(a[0],a[1]+1):
+#     if (i%3==0)and(i%5==0):
+#         print("Fizz and Buzz")
+#     if (i%3==0):
+#         print("Fizz")
+#     elif (i%5==0):
+#         print("Buzz")
+#     else:
+#         print(i)
+
+a = [10,20,30]
+a.extend([100,200])
+print(a)
+a.append([100,200])
+print(a)
+a.insert(2,[100,200])
+print(a)
+del a[2]
+print(a)
+a[1:1] = [50,60]
+print(a)
+
+a = [10,20,30]
+a[2:2]=['a','b']
+print(a)
+# a.pop()
+print(a.pop())
+print(a)
+# 변수카운트하고 지우는것이 오류를 안이르키는 중요해법
+a.remove(10)
+print(a)
+print(a.index(20))
+a = [10,20,30,40,50,20,40,30,30,30]
+print(a.count(10))
+print(a.count(20))
+print(a.count(30))
+print(a)
+a.reverse()
+print(a)
+a.sort()
+print(a)
+a.sort(reverse=True)
+print(a)
+a.sort(reverse=False)
+print(a)
+a.clear()
+print(a)
+# a = [120,123,12314]
+
+if len(a):
+    print("값이 있습니다.")
+else :
+    print("값이 없습니다.")
+
+#얇은복사 깊은복사
+a = [0,0,0,0,0]
+b=a
+a[1]=10
+print(a)
+print(b)
+#결과적으로는 a만 바꾸어도 b도 같이 바뀌게된다.
+
+b=a.copy()
+a[1]=30
+print(a)
+print(b)
+#이렇게 바꾸어야 객체를 존중해준다
+
+a=[38,32,53,62,19]
+for i in a:
+    print(i)
+#인덱스까지 같이출력
+for i,v in enumerate(a):
+    print(i,v)
+    
+
+a = [32,34,543,4,123]    
+smallM = 987654321
+bigM = 0
+
+while i<len(a):
+    if smallM > a[i]:
+        smallM=a[i]
+        
+    if bigM < a[i]:
+        bigM=a[i]
+    i+=1
+print(smallM)
+print(bigM)
+print(min(a))
+print(max(a))
+
+a = [i for i in range(10)]
+print(a)
+
+a = list(range(0,10))
+print(a)
+
+
+
+
