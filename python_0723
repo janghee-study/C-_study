@@ -1,0 +1,136 @@
+import RPi.GPIO as GPIO
+import time
+
+GPIO.setmode(GPIO.BCM)
+
+GPIO.setup(5,GPIO.OUT)
+
+while True:
+    GPIO.output(5,GPIO.HIGH)
+    time.sleep(1)
+    GPIO.output(5,GPIO.LOW)
+    time.sleep(1)
+    
+
+/////////////////////////////////////
+
+
+import RPi.GPIO as GPIO
+import time
+
+#GPIO.setmode(GPIO.BCM)
+#LED0=5
+#LED1=6
+GPIO.setmode(GPIO.BOARD)
+LED0=29
+LED1=31
+
+
+GPIO.setup(LED0,GPIO.OUT)
+GPIO.setup(LED1,GPIO.OUT)
+
+try:
+    while True:
+        GPIO.output(LED0,GPIO.HIGH)
+        GPIO.output(LED1,GPIO.LOW)
+        time.sleep(0.3)
+        GPIO.output(LED0,GPIO.LOW)
+        GPIO.output(LED1,GPIO.HIGH)
+        time.sleep(0.3)
+except KeyboardInterrupt:
+    print("except")
+finally:
+    print("cleanup")
+    GPIO.cleanup()
+//////////////////////////////////////////
+import RPi.GPIO as GPIO
+import time
+
+GPIO.setmode(GPIO.BCM)
+LED0=2
+LED1=3
+LED2=4
+LED3=17
+LED4=27
+LED5=22
+LED6=10
+LED7=9
+
+
+GPIO.setup(LED0,GPIO.OUT)
+GPIO.setup(LED1,GPIO.OUT)
+GPIO.setup(LED2,GPIO.OUT)
+GPIO.setup(LED3,GPIO.OUT)
+GPIO.setup(LED4,GPIO.OUT)
+GPIO.setup(LED5,GPIO.OUT)
+GPIO.setup(LED6,GPIO.OUT)
+GPIO.setup(LED7,GPIO.OUT)
+
+
+
+
+try:
+    while True:
+        GPIO.output(LED7,GPIO.LOW)
+        GPIO.output(LED0,GPIO.HIGH)
+        time.sleep(0.2)
+        GPIO.output(LED0,GPIO.LOW)
+        GPIO.output(LED1,GPIO.HIGH)
+        time.sleep(0.2)
+        GPIO.output(LED1,GPIO.LOW)
+        GPIO.output(LED2,GPIO.HIGH)
+        time.sleep(0.2)
+        GPIO.output(LED2,GPIO.LOW)
+        GPIO.output(LED3,GPIO.HIGH)
+        time.sleep(0.2)
+        GPIO.output(LED3,GPIO.LOW)
+        GPIO.output(LED4,GPIO.HIGH)
+        time.sleep(0.2)
+        GPIO.output(LED4,GPIO.LOW)
+        GPIO.output(LED5,GPIO.HIGH)
+        time.sleep(0.2)
+        GPIO.output(LED5,GPIO.LOW)
+        GPIO.output(LED6,GPIO.HIGH)
+        time.sleep(0.2)
+        GPIO.output(LED6,GPIO.LOW)
+        GPIO.output(LED7,GPIO.HIGH)
+        time.sleep(0.2)
+        
+except KeyboardInterrupt:
+    print("except")
+finally:
+    print("cleanup")
+    GPIO.cleanup()
+
+////////////////////////////////////////////////
+import RPi.GPIO as GPIO
+import time
+
+GPIO.setmode(GPIO.BCM)
+LED=[[2,3],[4,17],[27,22],[10,9]]
+
+for i in LED:
+    GPIO.setup(i,GPIO.OUT)
+    
+
+try:
+    while True:
+        for i in LED:
+            GPIO.output(i,GPIO.HIGH)
+            time.sleep(0.2)
+            GPIO.output(i,GPIO.LOW)
+            time.sleep(0.2)
+        LED.reversed()
+            
+except KeyboardInterrupt:
+    print("except")
+finally:
+    print("cleanup")
+    GPIO.cleanup()
+
+
+
+///////////////////////////////////////
+라즈베리파이로 시작하는 핸드메이드 iot 장치제어 파트
+라즈베리터미널실행X
+라즈베리파이썬에서 
