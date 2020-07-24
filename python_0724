@@ -1,0 +1,262 @@
+////////////////////////////////////////////
+import RPi.GPIO as GPIO
+import time
+
+GPIO.setmode(GPIO.BCM)
+LED=[17,27,22,5,6,13,16,20]
+status=[18,23,24,25,12,21]
+
+for i in status:
+    GPIO.setup(i,GPIO.OUT,initial=GPIO.HIGH)
+    #GPIO.output(i,GPIO.LOW)
+
+for i in LED:
+    GPIO.setup(i,GPIO.OUT)     
+
+FND_data = [[0,1,1,0,0,0,0,0],
+            [1,1,0,1,1,0,1,0],
+            [1,1,1,1,0,0,1,0],
+            [0,1,1,0,0,1,1,0],
+            [1,1,1,1,0,1,1,0],
+            [1,0,1,1,1,1,1,0],
+            [1,1,1,0,0,0,0,0],
+            [1,1,1,1,1,1,1,0],
+            [1,1,1,1,0,1,1,0]]
+   
+try:
+    while True:
+        GPIO.output(FND_status[0].GPIO.LOW)
+        for i in FND_data:
+            for j in range(8):
+                GPIO.output(LED[j],i[j])
+            time.sleep(0.5)
+            
+            
+except KeyboardInterrupt:
+    print("except")
+finally:
+    print("cleanup")
+    GPIO.cleanup()
+////////////////////////////////////////////
+import RPi.GPIO as GPIO
+import time
+
+GPIO.setmode(GPIO.BCM)
+LED=[17,27,22,5,6,13,16,20]#double count
+status=[18,23,24,25,12,21]
+
+for i in status:
+    GPIO.setup(i,GPIO.OUT,initial=GPIO.HIGH)
+    #GPIO.output(i,GPIO.LOW)
+
+for i in LED:
+    GPIO.setup(i,GPIO.OUT)     
+
+FND_data = [[0,1,1,0,0,0,0,0],
+            [1,1,0,1,1,0,1,0],
+            [1,1,1,1,0,0,1,0],
+            [0,1,1,0,0,1,1,0],
+            [1,0,1,1,0,1,1,0],
+            [1,0,1,1,1,1,1,0],
+            [1,1,1,0,0,0,0,0],
+            [1,1,1,1,1,1,1,0],
+            [1,1,1,1,0,1,1,0]]
+   
+try:
+    while True:
+        for i in range(6):
+            GPIO.output(status[i],GPIO.LOW)
+            for j in range(8):
+                GPIO.output(LED[j],FND_data[i][j])
+            time.sleep(0.001)
+            GPIO.output(status[i],GPIO.HIGH)
+            
+        
+        
+            
+except KeyboardInterrupt:
+    print("except")
+finally:
+    print("cleanup")
+    GPIO.cleanup()
+//////////////////////////////////////////////
+import RPi.GPIO as GPIO
+import time
+num=1
+GPIO.setmode(GPIO.BCM)
+LED=[17,27,22,5,6,13,16,20]#double count
+status=[18,23,24,25,12,21]
+
+#global
+def FND_num(str_num):
+    str_num =list(map(int,input())
+    return str_num
+    
+strA=FND_num("123123")
+
+FND_data = [[1,1,1,1,1,1,0,0],
+            [0,1,1,0,0,0,0,0],
+            [1,1,0,1,1,0,1,0],
+            [1,1,1,1,0,0,1,0],
+            [0,1,1,0,0,1,1,0],
+            [1,0,1,1,0,1,1,0],
+            [1,0,1,1,1,1,1,0],
+            [1,1,1,0,0,0,0,0],
+            [1,1,1,1,1,1,1,0],
+            [1,1,1,1,0,1,1,0]]
+
+#configuration(fin)
+for i in status:
+    GPIO.setup(i,GPIO.OUT,initial=GPIO.HIGH)
+for i in LED:
+    GPIO.setup(i,GPIO.OUT)
+#main
+try:
+    while True:
+        for i in range(6):
+            GPIO.output(status[i],GPIO.LOW)
+            for j in range(8):
+                GPIO.output(LED[j],FND_data[strA[i]][j])
+            time.sleep(0.003)
+            GPIO.output(status[i],GPIO.HIGH)
+            
+            
+except KeyboardInterrupt:
+    print("except")
+finally:
+    print("cleanup")
+    GPIO.cleanup()
+//////////////////////////////////////////////
+import RPi.GPIO as GPIO
+import time
+num=1
+GPIO.setmode(GPIO.BCM)
+LED=[17,27,22,5,6,13,16,20]#double count
+status=[18,23,24,25,12,21]
+
+#global
+def FND_num(str_num):
+    str_num =list(map(int,str_num))
+    for i in range(6):
+        GPIO.output(status[i],GPIO.LOW)
+        for j in range(8):
+            GPIO.output(LED[j],FND_data[str_num[i]][j])
+        time.sleep(0.003)
+        GPIO.output(status[i],GPIO.HIGH)
+        
+
+
+FND_data = [[1,1,1,1,1,1,0,0],
+            [0,1,1,0,0,0,0,0],
+            [1,1,0,1,1,0,1,0],
+            [1,1,1,1,0,0,1,0],
+            [0,1,1,0,0,1,1,0],
+            [1,0,1,1,0,1,1,0],
+            [1,0,1,1,1,1,1,0],
+            [1,1,1,0,0,0,0,0],
+            [1,1,1,1,1,1,1,0],
+            [1,1,1,1,0,1,1,0]]
+
+#configuration(fin)
+for i in status:
+    GPIO.setup(i,GPIO.OUT,initial=GPIO.HIGH)
+for i in LED:
+    GPIO.setup(i,GPIO.OUT)
+#main
+cnt=1
+try:
+    while True:
+        FND_num("%06d"%cnt)
+        cnt+=1
+except KeyboardInterrupt:
+    print("except")
+finally:
+    print("cleanup")
+    GPIO.cleanup()
+//////////////////////////////////////////////
+import RPi.GPIO as GPIO
+import time
+num=1
+GPIO.setmode(GPIO.BCM)
+LED=[17,27,22,5,6,13,16,20]#double count
+status=[18,23,24,25,12,21]
+
+#global
+def FND_num(str_num):
+    str_num =list(map(int,str_num))
+    for i in range(6):
+        GPIO.output(status[i],GPIO.LOW)
+        for j in range(8):
+            GPIO.output(LED[j],(FND_HEX[str_num[i]]>>j)&0x01)
+        time.sleep(0.003)
+        GPIO.output(status[i],GPIO.HIGH)
+        
+
+
+# FND_data = [[1,1,1,1,1,1,0,0],
+#             [0,1,1,0,0,0,0,0],
+#             [1,1,0,1,1,0,1,0],
+#             [1,1,1,1,0,0,1,0],
+#             [0,1,1,0,0,1,1,0],
+
+#             [1,0,1,1,0,1,1,0],
+#             [1,0,1,1,1,1,1,0],
+#             [1,1,1,0,0,0,0,0],
+#             [1,1,1,1,1,1,1,0],
+#             [1,1,1,1,0,1,1,0]]
+# FND_data = [[0,0,1,1,1,1,1,1],
+#             [0,0,0,0,0,1,1,0],
+#             [0,1,0,1,1,0,1,1],
+#             [0,1,0,0,1,1,1,1],
+#             [0,1,1,0,0,1,1,0],
+#             
+#             [0,1,1,0,1,1,0,1],
+#             [0,1,1,1,1,1,0,1],
+#             [0,0,1,0,0,1,1,1],
+#             [0,1,1,1,1,1,1,1],
+#             [0,1,1,0,1,1,1,1]]
+FND_HEX=[0x3F,0x06,0x5B,0x4F,0x66,0x6D,0x7D,0x27,0x7F,0x6F]
+
+#configuration(fin)
+for i in status:
+    GPIO.setup(i,GPIO.OUT,initial=GPIO.HIGH)
+for i in LED:
+    GPIO.setup(i,GPIO.OUT)
+#main
+    
+stA=input("input 6NUMBER: ")
+try:
+    while True:
+        FND_num(stA)
+            
+except KeyboardInterrupt:
+    print("except")
+finally:
+    print("cleanup")
+    GPIO.cleanup()
+/////////////////////////////////////////////
+def hello():
+    print("hellow, world")
+    
+val1 = hello()
+print(val1)
+def add(a,b):
+    return a+b,a-b
+
+val2,val3 = add(10,20)
+
+# val2 = add(10,20)
+print(val2)
+# val3 = add("10","20")
+print(val3)
+
+def FND_num(str_num):
+    str_num =list(map(int,str_num))
+    print(str_num)
+    print(str_num[1]+str_num[2])
+    
+FND_num("789789")
+
+
+
+
