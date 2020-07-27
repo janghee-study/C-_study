@@ -1,0 +1,380 @@
+////////////////////////////////////////////////MOTOR_control
+import RPi.GPIO as GPIO
+import time
+
+GPIO.setmode(GPIO.BCM)
+#함수선언
+def motor_init(P,N,EN):
+    GPIO.setup(P,GPIO.OUT,initial=GPIO.LOW)
+    GPIO.setup(N,GPIO.OUT,initial=GPIO.LOW)
+    GPIO.setup(EN,GPIO.OUT,initial=GPIO.LOW)
+
+def motor_cntl(mode):
+    if mode==1:#cw
+        GPIO.output(P,GPIO.LOW)
+        GPIO.output(N,GPIO.HIGH)
+        GPIO.output(EN,GPIO.HIGH)
+    elif mode==2:#ccw 
+        GPIO.output(P,GPIO.HIGH)
+        GPIO.output(N,GPIO.LOW)
+        GPIO.output(EN,GPIO.HIGH)
+    elif mode==3:#stop
+        GPIO.output(P,GPIO.LOW)
+        GPIO.output(N,GPIO.LOW)
+        GPIO.output(EN,GPIO.HIGH)
+    else:#brake
+        GPIO.output(P,GPIO.HIGH)
+        GPIO.output(N,GPIO.HIGH)
+        GPIO.output(EN,GPIO.HIGH)
+
+P,N,EN= 19,26,4
+motor_init(P,N,EN)
+try:
+    while True:
+        motor_cntl(2)#cw=1,ccw=2,stop=3,break=4
+        time.sleep(2)
+        motor_cntl(1)#cw=1,ccw=2,stop=3,break=4
+        time.sleep(2)
+
+        
+except KeyboardInterrupt:
+    print("except")  
+finally:
+    print("cleanup")
+    GPIO.cleanup()
+
+////////////////////////////////////////////////LED_PWM_조절
+import RPi.GPIO as GPIO
+import time
+
+GPIO.setmode(GPIO.BCM)
+#함수선언
+LED=21
+
+GPIO.setup(LED,GPIO.OUT)
+
+DC = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,15,20,30,50,70,100]
+p=GPIO.PWM(LED,100)# f=100Hz
+
+p.start(10)# PWM시작 듀티비
+
+try:
+    while True:
+        for i in DC:
+            p.ChangeDutyCycle(i)
+            time.sleep(0.05)
+        DC.reverse()
+        
+    
+except KeyboardInterrupt:
+    print("except")  
+finally:
+    print("cleanup")
+    p.stop()
+    GPIO.cleanup()
+
+////////////////////////////////////////////////motor_PWM_조절
+import RPi.GPIO as GPIO
+import time
+
+GPIO.setmode(GPIO.BCM)
+#함수선언
+def motor_init(P,N,EN):
+    GPIO.setup(P,GPIO.OUT,initial=GPIO.LOW)
+    GPIO.setup(N,GPIO.OUT,initial=GPIO.LOW)
+    GPIO.setup(EN,GPIO.OUT,initial=GPIO.LOW)
+
+def motor_cntl(mode,speed=0):#디폴트값이 0이된다.
+    if mode==1:#cw
+        GPIO.output(P,GPIO.LOW)
+        GPIO.output(N,GPIO.HIGH)
+    elif mode==2:#ccw 
+        GPIO.output(P,GPIO.HIGH)
+        GPIO.output(N,GPIO.LOW)
+    elif mode==3:#stop
+        GPIO.output(P,GPIO.LOW)
+        GPIO.output(N,GPIO.LOW)
+    else:#brake
+        GPIO.output(P,GPIO.HIGH)
+        GPIO.output(N,GPIO.HIGH)
+        
+    if speed!=0:
+        motor_speed(speed)
+
+def motor_speed(val):
+    p.ChangeDutyCycle(val)
+
+
+P,N,EN= 19,26,4
+motor_init(P,N,EN)
+
+p=GPIO.PWM(EN,100)# f=100Hz주파수는 100고정
+p.start(0)# PWM시작 듀티비만 조절하는것
+try:
+    motor_cntl(1)#디폴트로 사용 
+    while True:
+        val1 = int(input("속도값을 입력하세요 : "))
+        val2 = int(input("방향을 입력하세요 : "))
+        motor_cntl(val1,val2)
+    
+except KeyboardInterrupt:
+    print("except")  
+finally:
+    print("cleanup")
+    GPIO.cleanup()
+////////////////////////////////////////////////piezo_PWM_조절
+import RPi.GPIO as GPIO
+import time
+
+GPIO.setmode(GPIO.BCM)
+#함수선언
+PIEZO=25
+change_pwm=[261.62,293.66,329.62,349.22,391.99,440.00,493.88,523.25]
+GPIO.setup(PIEZO,GPIO.OUT,initial=GPIO.LOW)
+p = GPIO.PWM(PIEZO,261.62)
+p.start(10)
+
+try:
+    while True:
+        for i in change_pwm:
+            p.ChangeFrequency(i)
+            time.sleep(0.5)
+            
+except KeyboardInterrupt:
+    print("except")  
+finally:
+    print("cleanup")
+    p.stop()
+    GPIO.cleanup()
+////////////////////////////////////////////////Switch on-off확인
+import RPi.GPIO as GPIO
+import time
+
+GPIO.setmode(GPIO.BCM)
+
+SW = 19
+LED = 21
+GPIO.setup(SW,GPIO.IN)
+GPIO.setup(LED,GPIO.OUT)
+
+try:
+    while True:
+         if GPIO.input(SW)==GPIO.LOW:
+             print("스위치가 안눌림")
+             GPIO.output(LED,GPIO.LOW)
+         else:
+             print("스위치가 눌려씀")
+             GPIO.output(LED,GPIO.HIGH)
+      
+except KeyboardInterrupt:
+    print("except")  
+finally:
+    print("cleanup")
+    GPIO.cleanup()
+////////////////////////////////////////////////Switch on-off확인(소프트웨어)
+#소프트웨어적인 방식 
+import RPi.GPIO as GPIO
+import time
+
+GPIO.setmode(GPIO.BCM)
+
+SW = 19
+LED = 21
+flag_LED = False
+
+GPIO.setup(SW,GPIO.IN)
+GPIO.setup(LED,GPIO.OUT)
+cnt=0
+try:
+    while True:
+        if GPIO.input(SW)==GPIO.LOW:
+            pass
+        else:
+            if flag_LED == False:
+                GPIO.output(LED,GPIO.HIGH)
+                flag_LED =True
+            else :
+                GPIO.output(LED,GPIO.LOW)
+                flag_LED =False
+            time.sleep(0.2)
+                
+                
+except KeyboardInterrupt:
+    print("except")  
+finally:
+    print("cleanup")
+    GPIO.cleanup()
+////////////////////////////////////////////////스위치로 모터제어 
+import RPi.GPIO as GPIO
+import time
+GPIO.setmode(GPIO.BCM)
+#선언
+def motor_init(P,N,EN):
+    GPIO.setup(P,GPIO.OUT,initial=GPIO.LOW)
+    GPIO.setup(N,GPIO.OUT,initial=GPIO.LOW)
+    GPIO.setup(EN,GPIO.OUT,initial=GPIO.LOW)
+    
+def motor_cntl(mode):
+    if mode==1:#cw
+        GPIO.output(P,GPIO.LOW)
+        GPIO.output(N,GPIO.HIGH)
+        GPIO.output(EN,GPIO.HIGH)
+    elif mode==3:#ccw 
+        GPIO.output(P,GPIO.HIGH)
+        GPIO.output(N,GPIO.LOW)
+        GPIO.output(EN,GPIO.HIGH)
+    elif mode==2:#stop
+        GPIO.output(P,GPIO.LOW)
+        GPIO.output(N,GPIO.LOW)
+        GPIO.output(EN,GPIO.HIGH)
+    else:#brake
+        GPIO.output(P,GPIO.HIGH)
+        GPIO.output(N,GPIO.HIGH)
+        GPIO.output(EN,GPIO.HIGH)
+
+SW = 19
+P,N,EN= 23,24,25
+
+GPIO.setup(SW,GPIO.IN)
+motor_init(P,N,EN)
+
+state = 1
+try:
+    while True:
+        if GPIO.input(SW)==GPIO.LOW:
+            pass
+        else:
+            if state == 1:
+                motor_cntl(state)
+                state =2
+            elif state == 2:
+                motor_cntl(state)
+                state =3
+            elif state == 3:
+                motor_cntl(state)
+                state =4
+            else :
+                motor_cntl(state)
+                state =1
+            time.sleep(0.2)
+               
+                
+except KeyboardInterrupt:
+    print("except")  
+finally:
+    print("cleanup")
+    GPIO.cleanup()
+////////////////////////////////////////////////Switch on-off확인
+//점멸하는 led를 껏다 켰다 
+import RPi.GPIO as GPIO
+import time
+
+GPIO.setmode(GPIO.BCM)
+
+SW = 19
+LED = 21
+flag_LED = False
+
+GPIO.setup(SW,GPIO.IN)
+GPIO.setup(LED,GPIO.OUT)
+cnt=0
+try:
+    while True:
+        if GPIO.input(SW)==GPIO.LOW:
+            pass
+        else:
+            if flag_LED == False:
+                flag_LED =True
+            else :
+                flag_LED =False
+            time.sleep(0.3)
+            #상태값에 따른 동작기술
+            if flag_LED==False:
+                GPIO.output(LED,GPIO.LOW)
+            else:
+                GPIO.output(LED,GPIO.HIGH)
+                time.sleep(0.01)
+                GPIO.output(LED,GPIO.LOW)
+                time.sleep(0.01)
+                
+                
+except KeyboardInterrupt:
+    print("except")  
+finally:
+    print("cleanup")
+    GPIO.cleanup()
+
+////////////////////////////////////////////////Switch on-off확인(상승,하강엣지)
+#소프트웨어적인 방식 
+import RPi.GPIO as GPIO
+import time
+
+GPIO.setmode(GPIO.BCM)
+
+SW = 19
+LED = 21
+flag_LED = False
+pre_value,cur_value = 0,0 #이전값,현재값 저장할공간생성 
+
+GPIO.setup(SW,GPIO.IN)
+GPIO.setup(LED,GPIO.OUT)
+cnt=0
+try:
+    while True:
+        cur_value = GPIO.input(SW) #현재값 저장
+        if pre_value==False and cur_value==True: #상승엣지발생
+       #if pre_value==True and cur_value==False: #하강엣지발생    
+            cnt+=1
+            if flag_LED == False:
+                GPIO.output(LED,GPIO.HIGH)
+                flag_LED =True
+            else :
+                GPIO.output(LED,GPIO.LOW)
+                flag_LED =False
+        print(cnt)
+        
+        pre_value = cur_value
+                
+except KeyboardInterrupt:
+    print("except")  
+finally:
+    print("cleanup")
+    GPIO.cleanup()
+
+////////////////////////////////////////////////Switch on-off확인(상승,하강엣지)
+#소프트웨어적인 방식 
+import RPi.GPIO as GPIO
+import time
+
+GPIO.setmode(GPIO.BCM)
+
+SW = 19
+LED = 21
+flag_LED = False
+pre_value,cur_value = 0,0 #이전값,현재값 저장할공간생성 
+
+GPIO.setup(SW,GPIO.IN)
+GPIO.setup(LED,GPIO.OUT)
+cnt=0
+try:
+    while True:
+        cur_value = GPIO.input(SW) #현재값 저장
+        if pre_value==False and cur_value==True: #상승엣지발생
+       #if pre_value==True and cur_value==False: #하강엣지발생    
+            cnt+=1
+            if flag_LED == False:
+                GPIO.output(LED,GPIO.HIGH)
+                flag_LED =True
+            else :
+                GPIO.output(LED,GPIO.LOW)
+                flag_LED =False
+        time.sleep(0.0001)
+        #print(cnt) #넣으면 동작이 잘된다.
+        
+        pre_value = cur_value
+                
+except KeyboardInterrupt:
+    print("except")  
+finally:
+    print("cleanup")
+    GPIO.cleanup()
