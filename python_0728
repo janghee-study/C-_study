@@ -1,0 +1,380 @@
+#인터럽트를 알아가는과정
+#스위치를 두개조정해서 시작_정지,초기화를 조절
+import RPi.GPIO as GPIO
+import time
+
+GPIO.setmode(GPIO.BCM)
+
+SW = [19,26]
+LED = [23,24,25,12]
+
+pre_value0, cur_value0 = 0, 0
+pre_value1, cur_value1 = 0, 0
+cnt=0
+flag_cnt = False
+
+GPIO.setup(SW, GPIO.IN)
+GPIO.setup(LED, GPIO.OUT)
+
+try:
+    while True:
+        cur_value0 = GPIO.input(SW[0])   # 현재값 저장
+        cur_value1 = GPIO.input(SW[1])   # 현재값 저장
+        
+        # 스위치 엣지 체크
+        if pre_value0==False and cur_value0==True:  # 시작/정지
+            if flag_cnt==False:
+                cnt+=1
+                flag_cnt = True
+            else:
+                flag_cnt = False
+        
+        if pre_value1==False and cur_value1==True:  # 리셋
+            cnt=0
+            flag_cnt = False
+        
+        # 상태값에 따른 동작 기술
+        if flag_cnt == False:
+            pass
+        else:
+            cnt+=1               
+            time.sleep(0.3)
+        
+        # LED 출력
+        for i in range(4):
+            GPIO.output(LED[i], (cnt>>i)&0x01) 
+  
+        pre_value0 = cur_value0     # 현재값을 이전값 저장
+        pre_value1 = cur_value1     # 현재값을 이전값 저장
+       
+finally:
+    print("cleanup")
+    GPIO.cleanup()
+///////////////////////////////////////////////////////////////
+#인터럽트사용법
+import RPi.GPIO as GPIO
+import time
+
+GPIO.setmode(GPIO.BCM)
+
+def my_callback(channel):
+    print("sw pressed")
+
+SW = 23
+GPIO.setup(SW, GPIO.IN)
+
+#외부인터럽트
+GPIO.add_event_detect(SW,GPIO.RISING,callback=my_callback)
+
+try:
+    while True:
+        pass
+       
+finally:
+    print("cleanup")
+    GPIO.cleanup()
+///////////////////////////////////////////////////////////////
+#인터럽트로 위의 프로그램_재코딩
+import RPi.GPIO as GPIO
+import time
+
+GPIO.setmode(GPIO.BCM)
+
+#사용자함수의 위치
+def cnt_start_stop(channel): #callback function,ISR(interrupt service rutine)
+    global flag_cnt #전역변수사용
+    if flag_cnt==False:
+        flag_cnt = True
+    else:
+        flag_cnt = False
+
+def cnt_reset(channel):
+    global flag_cnt #전역변수사용
+    global cnt
+    cnt=0
+    flag_cnt = True
+
+SW = [19,26]
+LED = [23,24,25,12]
+cnt=0
+flag_cnt = False
+
+GPIO.setup(SW, GPIO.IN)
+GPIO.setup(LED, GPIO.OUT)
+GPIO.add_event_detect(SW[0],GPIO.RISING,callback=cnt_start_stop)
+GPIO.add_event_detect(SW[1],GPIO.RISING,callback=cnt_reset)
+
+
+try:
+    while True:
+        # 상태값에 따른 동작 기술
+        if flag_cnt == False:
+            pass
+        else:
+            cnt+=1               
+            time.sleep(0.3)
+        
+        # LED 출력
+        for i in range(4):
+            GPIO.output(LED[i], (cnt>>i)&0x01) 
+       
+finally:
+    print("cleanup")
+    GPIO.cleanup()
+///////////////////////////////////////////////////////////////
+#LED0.3초 점등,LED0.5초 점등(최소공배수방법으로 작성중)-->불가능
+import RPi.GPIO as GPIO
+import time
+
+GPIO.setmode(GPIO.BCM)
+
+#사용자함수의 위치
+def start_stop1(channel): #callback function,ISR(interrupt service rutine)
+    global flag_state1 #전역변수사용
+    if flag_state1==False:
+        flag_state1 = True
+    else:
+        flag_state1 = False
+        
+def start_stop2(channel):
+    global flag_state2 #전역변수사용
+    if flag_state2==False:
+        flag_state2 = True
+    else:
+        flag_state2 = False
+
+
+SW = [19,26]
+LED = [23,24]
+
+GPIO.setup(SW, GPIO.IN)
+GPIO.setup(LED, GPIO.OUT)
+
+flag_state1=False
+flag_state2=False
+
+GPIO.add_event_detect(SW[0],GPIO.RISING,callback=start_stop1)
+GPIO.add_event_detect(SW[1],GPIO.RISING,callback=start_stop2)
+
+try:
+    while True:
+        # 상태값에 따른 동작 기술
+        if flag_state1 == False and flag_state2 == False :
+            pass
+        elif flag_state1 == False and flag_state2 == True:
+            GPIO.output(LED[0],GPIO.LOW)
+            time.sleep(0.5)
+            GPIO.output(LED[0],GPIO.HIGH)
+            time.sleep(0.5)
+        elif flag_state1 == True and flag_state2 == False:
+            GPIO.output(LED[1],GPIO.LOW)
+            time.sleep(0.3)
+            GPIO.output(LED[1],GPIO.HIGH)
+            time.sleep(0.3)
+        else :
+            GPIO.output(LED[0],GPIO.LOW)
+            GPIO.output(LED[1],GPIO.LOW)
+            time.sleep(0.3)
+            GPIO.output(LED[1],GPIO.HIGH)
+            time.sleep(0.2)
+            GPIO.output(LED[0],GPIO.HIGH)
+            GPIO.output(LED[1],GPIO.LOW)
+            time.sleep(0.1)
+            #0.3과 0.5의 최소공배수 1.5까지의 주기를 알아서내해버림 
+       
+finally:
+    print("cleanup")
+    GPIO.cleanup()
+///////////////////////////////////////////////////////////////
+#스레드를 통해서 위에 문제를 해결
+import RPi.GPIO as GPIO
+import time
+import threading
+
+GPIO.setmode(GPIO.BCM)
+
+#사용자함수의 위치
+def start_stop0(channel): #callback function,ISR(interrupt service rutine)
+    global flag_state0 #전역변수사용
+    if flag_state0==False:
+        flag_state0 = True
+    else:
+        flag_state0 = False
+        
+def start_stop1(channel):
+    global flag_state1 #전역변수사용
+    if flag_state1==False:
+        flag_state1 = True
+    else:
+        flag_state1 = False
+
+def LED0_thread():
+    while True:
+        if flag_state0==True:
+            GPIO.output(LED[0],GPIO.LOW)
+            time.sleep(0.5)
+            GPIO.output(LED[0],GPIO.HIGH)
+            time.sleep(0.5)
+        if thread_stop==1:#프로세서를 꺼버리기위해서 만듬 
+            break
+def LED1_thread():
+    while True:
+        if flag_state1==True:
+            GPIO.output(LED[1],GPIO.LOW)
+            time.sleep(0.3)
+            GPIO.output(LED[1],GPIO.HIGH)
+            time.sleep(0.3)
+        if thread_stop==1:
+            break
+
+SW = [19,26]
+LED = [23,24]
+
+GPIO.setup(SW, GPIO.IN)
+GPIO.setup(LED, GPIO.OUT)
+
+flag_state0=False
+flag_state1=False
+
+GPIO.add_event_detect(SW[0],GPIO.RISING,callback=start_stop0)
+GPIO.add_event_detect(SW[1],GPIO.RISING,callback=start_stop1)
+
+try:
+    t1 = threading.Thread(target=LED0_thread)
+    t2 = threading.Thread(target=LED1_thread)
+    t1.start()
+    t2.start()
+    while True:
+        pass
+       
+finally:
+    print("cleanup")
+    thread_stop=1
+    t1.join()#종료가 아니라 쓰레드가 끝날때까지 기다린다는 얘기 
+    t2.join()
+    GPIO.cleanup()
+///////////////////////////////////////////////////////////////
+#key_matrix사용하는 방법 R축과 C축을 사용
+#R축-input,C축-output
+import RPi.GPIO as GPIO
+import time
+
+GPIO.setmode(GPIO.BCM)
+
+# 사용자 함수
+def LINE0_callback(channel):  # 0,4,8,C
+    global num
+    #num_val = [0x0,0x4,0x8,0xC]
+    if GPIO.input(R[0]) == GPIO.HIGH:
+        num = 0x00
+    elif GPIO.input(R[1]) == GPIO.HIGH:
+        num = 0x04
+    elif GPIO.input(R[2]) == GPIO.HIGH:
+        num = 0x08
+    elif GPIO.input(R[3]) == GPIO.HIGH:
+        num = 0x0C
+    print(num)
+
+def LINE1_callback(channel):  # 1,5,9,D
+    global num
+    if GPIO.input(R[0]) == GPIO.HIGH:
+        num = 0x01
+    elif GPIO.input(R[1]) == GPIO.HIGH:
+        num = 0x05
+    elif GPIO.input(R[2]) == GPIO.HIGH:
+        num = 0x09
+    elif GPIO.input(R[3]) == GPIO.HIGH:
+        num = 0x0D
+    print(num)
+
+def LINE2_callback(channel):  # 2,6,A,E
+    global num
+    if GPIO.input(R[0]) == GPIO.HIGH:
+        num = 0x02
+    elif GPIO.input(R[1]) == GPIO.HIGH:
+        num = 0x06
+    elif GPIO.input(R[2]) == GPIO.HIGH:
+        num = 0x0A
+    elif GPIO.input(R[3]) == GPIO.HIGH:
+        num = 0x0E
+    print(num)
+
+def LINE3_callback(channel):  # 3,7,B,F
+    global num
+    if GPIO.input(R[0]) == GPIO.HIGH:
+        num = 0x03
+    elif GPIO.input(R[1]) == GPIO.HIGH:
+        num = 0x07
+    elif GPIO.input(R[2]) == GPIO.HIGH:
+        num = 0x0B
+    elif GPIO.input(R[3]) == GPIO.HIGH:
+        num = 0x0F
+    print(num)
+    
+R_val = [0x01,0x02,0x04,0x08]
+
+R=[18,23,24,25]
+C=[12,16,20,21]
+LED=[5,6,13,19]
+
+num = 0x00
+
+GPIO.setup(R, GPIO.OUT)
+GPIO.setup(C, GPIO.IN)
+GPIO.setup(LED, GPIO.OUT)
+
+# 외부인터럽트
+GPIO.add_event_detect(C[0], GPIO.RISING, callback=LINE0_callback) 
+GPIO.add_event_detect(C[1], GPIO.RISING, callback=LINE1_callback)
+GPIO.add_event_detect(C[2], GPIO.RISING, callback=LINE2_callback)
+GPIO.add_event_detect(C[3], GPIO.RISING, callback=LINE3_callback)
+
+try:
+    while True:
+        # R 출력
+        for i in range(4):
+            for j in range(4):
+                GPIO.output(R[j], (R_val[i]>>j)&0x01)
+            time.sleep(0.1)
+        
+            # LED 출력
+            for k in range(4):
+                GPIO.output(LED[k], (num>>k)&0x01)
+                
+finally:
+    print("cleanup")
+    GPIO.cleanup()
+///////////////////////////////////////////////////////////////
+#초음파센서를 통해서 거리측정(간단히사용)
+import RPi.GPIO as GPIO
+import time
+
+GPIO.setmode(GPIO.BCM)
+
+trig = 17
+echo = 27
+
+GPIO.setup(echo,GPIO.IN)
+GPIO.setup(trig,GPIO.OUT)
+
+try:
+    while True:
+        GPIO.output(trig,GPIO.HIGH)
+        time.sleep(0.00001) #10us
+        GPIO.output(trig,GPIO.LOW)
+        while GPIO.input(echo) == 0:
+            StartTime = time.time()
+
+        while GPIO.input(echo) == 1:
+            StopTime = time.time()
+            
+        TimeElapsed = StopTime - StartTime
+        distance = (TimeElapsed * 34300) / 2
+        
+        print("측정한값 = %.1f cm" %distance)
+        time.sleep(1.5)
+        
+
+finally:
+    print("clean up")
+    GPIO.cleanup()
