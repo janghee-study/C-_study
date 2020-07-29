@@ -1,0 +1,546 @@
+#창띄우기
+import PyQt5
+#import방법이 두가지import,from_원하는것만 댈꼬옴
+import sys #시스템밑에 라이브러리 다가지고옴 test에서 쓸려고 밖으로 끌고감
+from PyQt5.QtWidgets import QApplication, QWidget, QMenu
+
+
+class MyApp(QWidget):
+
+    def __init__(self): #생성자
+        super().__init__() #부모(super)의 생성자를 호출
+        self.initUI() #나 자신의 함수를 호출하기 때문에 self
+
+    def initUI(self): #부모의 것을 가져다가씀
+        self.setWindowTitle('My First Application') #타이틀의 제목
+        self.move(700,300) #모니터위치에 나타남
+        self.resize(400,200) #사이즈
+        self.show() #보여줌
+
+print(__name__) #자기자신을 실행하면 콘솔창에 __main__이 나오게됨 import해서 쓰는경우에는 이 클래쓰의 이름이 나오게된다.
+if __name__ == "__main__": #다른곳에서 import하게되면 나오지않게된다.
+     app =QApplication(sys.argv)
+     ex = MyApp() #실행
+     # ex2 = MyApp()
+     sys.exit(app.exec_()) #시스템종료하면 나가라~
+/////////////////////////////////////////////////////////////////////////
+#어플리케이션 아이콘 넣기
+import sys
+from PyQt5.QtWidgets import QApplication, QWidget
+from PyQt5.QtGui import QIcon
+
+class MyApp(QWidget):
+
+    def __init__(self):
+        super().__init__()
+        self.initUI()
+
+    def initUI(self):
+        self.setWindowTitle('Icon') #타이틀의 제목
+        #self.setWindowIcon(QIcon('web.png')) # ./web.png 이런식으로 상대경로 표시가능능
+        #self.setWindowIcon(QIcon('image/web.png'))  # ./web.png 이런식으로 상대경로 표시가능능
+        self.setWindowIcon(QIcon('image/faceicon.png'))  # ./web.png 이런식으로 상대경로 표시가능능
+
+        # elf.move(700,300) #모니터위치에 나타남
+        # self.resize(400,200) #사이즈
+        # 위를 한번에 처리
+        self.setGeometry(300,300,70,15)
+        self.show() #보여줌
+
+print(__name__) #자기자신을 실행하면 콘솔창에 __main__이 나오게됨 import해서 쓰는경우에는 이 클래쓰의 이름이 나오게된다.
+if __name__ == "__main__": #다른곳에서 import하게되면 나오지않게된다.
+    app =QApplication(sys.argv)
+    ex = MyApp() #실행
+    # ex2 = MyApp()
+    sys.exit(app.exec_())
+/////////////////////////////////////////////////////////////////////////
+#창닫기
+import sys
+from PyQt5.QtWidgets import QApplication, QWidget, QPushButton
+from PyQt5.QtCore import QCoreApplication
+
+def push_btn():
+    print("pressed")
+
+class MyApp(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.initUI()
+
+    def initUI(self):
+        btn = QPushButton('Quit', self) #self자체가 MyApp
+        btn.move(200,100) #만들어지는 창안에서 50,50
+        btn.resize(btn.sizeHint())
+        #btn.clicked.connect(QCoreApplication.instance().quit) #클릭 시그널
+        btn.clicked.connect(push_btn) #클릭 시그널
+
+        self.setWindowTitle("quit button")
+        self.setGeometry(300,300,300,200)
+        self.show()
+
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    ex = MyApp()
+    sys.exit(app.exec_())
+/////////////////////////////////////////////////////////////////////////
+#툴팁나타내기
+import sys
+from PyQt5.QtWidgets import QApplication, QWidget, QPushButton,QToolTip
+from PyQt5.QtGui import QFont
+def push_btn():
+    print("pressed")
+class MyApp(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.initUI()
+
+    def initUI(self):
+        QToolTip.setFont(QFont('SansSerif',10))
+        # self.setToolTip('This is a <b>QWidget</b> widget') #self에 tooltip을 만들었기 때문에 아무대서나 나오게된다.
+
+        btn = QPushButton('Button',self)
+        btn.setToolTip('This is a <b>QPushButton</b> widget')
+        # btn.move(50,50)
+        # btn.resize(btn.sizeHint())
+        btn.setGeometry(50,50,80,30)
+        btn.clicked.connect(push_btn) #클릭 시그널
+
+        self.setWindowTitle("quit button")
+        self.setGeometry(300,300,300,200)
+        self.show()
+
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    ex = MyApp()
+    sys.exit(app.exec_())
+/////////////////////////////////////////////////////////////////////////
+#상태바 만들기
+import sys
+from PyQt5.QtWidgets import QApplication,QMainWindow
+
+class MyApp(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        self.initUI()
+
+    def initUI(self):
+        self.statusBar().showMessage('Ready')
+
+        self.setWindowTitle('statusbar')
+        self.setGeometry(300,300,300,200)
+        self.show()
+
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    ex = MyApp()
+    sys.exit(app.exec_())
+/////////////////////////////////////////////////////////////////////////
+#메뉴바,툴바 만들기
+import sys
+from PyQt5.QtWidgets import QApplication,QMainWindow,QAction,qApp,QPushButton
+from PyQt5.QtGui import QIcon
+
+class MyApp(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        self.initUI()
+
+    def initUI(self):
+        exitAction = QAction(QIcon('image/exit.png'),'Exit',self)
+        exitAction.setShortcut('Ctrl+Q')
+        exitAction.setStatusTip('Exit application')
+        exitAction.triggered.connect(qApp.quit)
+
+        #undo부분:
+        undoAction = QAction(QIcon('image/undo.png'),'Undo',self)
+        undoAction.setShortcut('Ctrl+Z')
+        undoAction.setStatusTip('Undo application')
+        undoAction.triggered.connect(qApp.quit)
+
+        #상태바 생성
+        self.statusBar()
+        #툴바생성
+        self.toolbar = self.addToolBar('Exit')
+        self.toolbar.addAction(exitAction)
+/////////////////////////////////////////////////////////////////////////
+#창을 화면의 가운데로
+import sys
+from PyQt5.QtWidgets import QApplication, QWidget, QDesktopWidget
+
+class MyApp(QWidget):
+
+    def __init__(self):
+        super().__init__()
+        self.initUI()
+
+    def initUI(self):
+        self.setWindowTitle('Centering')
+        self.resize(500, 900)
+        self.center()
+        self.show()
+
+    def center(self):
+        qr = self.frameGeometry()
+        print(qr)
+        cp = QDesktopWidget().availableGeometry().center()
+        print(cp)
+        qr.moveCenter(cp)
+        self.move(qr.topLeft())
+
+
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    ex = MyApp()
+    sys.exit(app.exec_())
+/////////////////////////////////////////////////////////////////////////
+#시간 표시하기
+import sys
+from PyQt5.QtWidgets import QApplication,QMainWindow
+from PyQt5.QtCore import QDate,QTime
+
+class MyApp(QMainWindow):
+    def __init__(self):
+        super().__init__()
+        self.initUI()
+
+    def initUI(self):
+        time = QTime.currentTime()
+        print(time.toString())
+        self.statusBar().showMessage(time.toString('ap hh:mm'))
+
+        self.setWindowTitle('statusbar')
+        self.setGeometry(300,300,300,200)
+        self.show()
+        time = QTime.currentTime()
+        now = QDate.currentDate()
+
+
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    ex = MyApp()
+    sys.exit(app.exec_())
+/////////////////////////////////////////////////////////////////////////
+#스타일 꾸미기
+import sys
+from PyQt5.QtWidgets import QApplication,QWidget,QLabel,QVBoxLayout
+
+class MyApp(QWidget):
+
+    def __init__(self):
+        super().__init__()
+        self.initUI()
+
+    def initUI(self):
+        #라벨생성
+        lbl_red = QLabel('Red')
+        lbl_green = QLabel('Green')
+        lbl_blue = QLabel('Blue')
+        #라벨꾸미기
+        lbl_red.setStyleSheet("color: red;"
+                              "border-style: solid;"
+                              "border-width: 2px;"
+                              "border-color: #FA8072;"
+                              "border-radius: 3px")
+        lbl_green.setStyleSheet("color: green;"
+                                "background-color: #7FFFD4")
+        lbl_blue.setStyleSheet("color: blue;"
+                               "background-color: #87CEFA;"
+                               "border-style: dashed;"
+                               "border-width: 3px;"
+                               "border-color: #1E90FF")
+        #vbox생성
+        vbox = QVBoxLayout()
+        vbox.addWidget(lbl_red)
+        vbox.addWidget(lbl_green)
+        vbox.addWidget(lbl_blue)
+
+        self.setLayout(vbox)
+
+        self.setWindowTitle('Stylesheet')
+        self.resize(500, 300)
+        self.show()
+
+
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    ex = MyApp()
+    sys.exit(app.exec_())
+/////////////////////////////////////////////////////////////////////////
+# Ok,Cancel 버튼만들기
+import sys
+from PyQt5.QtWidgets import QApplication, QWidget, QPushButton
+from PyQt5.QtCore import QCoreApplication
+
+def push_btn1():
+    print("ok")
+
+def push_btn2():
+    print("cancel")
+
+
+class MyApp(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.initUI()
+
+    def initUI(self):
+        btn1 = QPushButton('Ok', self)
+        btn1.resize(60, 40)
+        btn1.move(110, 100)
+        btn1.clicked.connect(push_btn1)
+
+        btn2 = QPushButton('Cancel', self)
+        btn2.resize(60, 40)
+        btn2.move(240, 100)
+        btn2.clicked.connect(push_btn2)
+
+        #버튼꾸미기기
+        btn1.setStyleSheet("color: red;"
+                             "border-style: solid;"
+                             "border-width: 2px;"
+                             "border-color: #FA8072;"
+                             "border-radius: 3px")
+
+        btn2.setStyleSheet("color: green;"
+                           "border-style: solid;"
+                           "border-width: 2px;"
+                           "border-color: #12FF12;"
+                           "border-radius: 3px")
+
+
+        self.setWindowTitle("OK,CANCEL button")
+        self.setGeometry(300,300,400,200)
+        self.show()
+
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    ex = MyApp()
+    sys.exit(app.exec_())
+/////////////////////////////////////////////////////////////////////////
+#박스 레이아웃
+import sys
+from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QHBoxLayout, QVBoxLayout
+
+def push_btn1():
+    print("ok")
+
+def push_btn2():
+    print("cancel")
+
+class MyApp(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.initUI()
+
+    def initUI(self):
+        okButton = QPushButton('OK')
+        cancelButton = QPushButton('Cancel')
+
+        # hbox = QHBoxLayout()
+        # hbox.addWidget(okButton)
+        # hbox.addWidget(cancelButton)
+        hbox = QHBoxLayout()
+        hbox.addStretch(1)
+        hbox.addWidget(okButton)
+        hbox.addWidget(cancelButton)
+        hbox.addStretch(1)
+
+        vbox = QVBoxLayout()
+        vbox.addStretch(3)
+        vbox.addLayout(hbox)
+        vbox.addStretch(1)
+
+        self.setLayout(vbox)
+
+        self.setWindowTitle("BOX LayOut")
+        self.setGeometry(300,300,400,200)
+        self.show()
+
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    ex = MyApp()
+    sys.exit(app.exec_())
+/////////////////////////////////////////////////////////////////////////
+#그리드 레이아웃
+import sys
+from PyQt5.QtWidgets import (QApplication, QWidget, QGridLayout, QLabel, QLineEdit, QTextEdit)
+
+class MyApp(QWidget):
+
+    def __init__(self):
+        super().__init__()
+        self.initUI()
+
+    def initUI(self):
+        grid = QGridLayout()
+        self.setLayout(grid)
+
+        grid.addWidget(QLabel('Title:'), 0, 0)
+        grid.addWidget(QLabel('Author:'), 1, 0)
+        grid.addWidget(QLabel('Review:'), 2, 0)
+
+        grid.addWidget(QLineEdit(), 0, 1)
+        grid.addWidget(QLineEdit(), 1, 1)
+        grid.addWidget(QTextEdit(), 2, 1)
+
+        self.setWindowTitle('QGridLayout')
+        self.setGeometry(300, 300, 300, 200)
+        self.show()
+
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    ex = MyApp()
+    sys.exit(app.exec_())
+/////////////////////////////////////////////////////////////////////////
+#구역나눠서 레이아웃
+import sys
+from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QHBoxLayout, QVBoxLayout
+
+def push_btn1():
+    print("ok")
+
+def push_btn2():
+    print("cancel")
+
+class MyApp(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.initUI()
+
+    def initUI(self):
+        AButton = QPushButton('A')
+        BButton = QPushButton('B')
+        CButton = QPushButton('C')
+        DButton = QPushButton('D')
+        EButton = QPushButton('E')
+        FButton = QPushButton('F')
+
+        hbox = QHBoxLayout()
+        hbox.addWidget(AButton)
+        hbox.addWidget(BButton)
+        hbox.addWidget(CButton)
+
+        vbox = QVBoxLayout()
+        vbox.addLayout(hbox)
+        vbox.addWidget(DButton)
+        vbox.addWidget(EButton)
+        vbox.addWidget(FButton)
+
+        self.setLayout(vbox)
+
+        self.setWindowTitle("BOX LayOut")
+        self.setGeometry(300,300,400,200)
+        self.show()
+
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    ex = MyApp()
+    sys.exit(app.exec_())
+/////////////////////////////////////////////////////////////////////////
+#라즈베리파이->LED_button
+import RPi.GPIO as GPIO
+import sys
+from PyQt5.QtWidgets import (QApplication, QWidget, QGridLayout, QLabel, QLineEdit, QTextEdit,QPushButton)
+
+GPIO.setmode(GPIO.BCM)
+LED = 24
+GPIO.setup(LED,GPIO.OUT)
+
+
+def LED_Toggle():
+    GPIO.output(LED,not GPIO.input(LED))
+    
+class MyApp(QWidget):
+
+    def __init__(self):
+        super().__init__()
+        self.initUI()
+
+    def initUI(self):
+        ledButton = QPushButton('LED',self)
+        ledButton.move(50,50)
+        ledButton.resize(ledButton.sizeHint())
+        ledButton.clicked.connect(LED_Toggle)
+        self.setWindowTitle('LED Control')
+        self.setGeometry(300, 300, 300, 200)
+        self.show()
+
+
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    ex = MyApp()
+    sys.exit(app.exec_())
+/////////////////////////////////////////////////////////////////////////
+#LED_Button 메인클래쓰
+import sys
+from PyQt5.QtWidgets import (QApplication, QWidget, QGridLayout, QLabel, QLineEdit, QTextEdit,QPushButton)
+from LEDCtrl import *
+
+def LED_Toggle():
+    print("test")
+    LED.LED_TOGGLE()
+    
+class MyApp(QWidget):
+
+    def __init__(self):
+        super().__init__()
+        self.initUI()
+
+    def initUI(self):
+        ledButton = QPushButton('LED',self)
+        ledButton.move(50,50)
+        ledButton.resize(ledButton.sizeHint())
+        ledButton.clicked.connect(LED_Toggle)
+        
+        self.setWindowTitle('LED Control')
+        self.setGeometry(300, 300, 300, 200)
+        self.show()
+
+
+if __name__ == '__main__':
+    try:
+        LED = LEDCntl(GPIO.BCM,24)
+        
+        app = QApplication(sys.argv)
+        ex = MyApp()
+        sys.exit(app.exec_())
+    except KeyboardInterrupt:
+        print("except")
+    finally:
+        print("cleanup")
+        GPIO.cleanup()
+/////////////////////////////////////////////////////////////////////////
+#LED_Button LED클래쓰
+import RPi.GPIO as GPIO
+import time
+
+class LEDCntl:
+    def __init__(self,mode,pin):
+        self.pin = pin
+        self.mode = mode
+        
+        GPIO.setmode(mode)
+        GPIO.setup(pin,GPIO.OUT)
+        
+    def LED_ON(self):
+        GPIO.output(self.pin,GPIO.HIGH)
+        
+    def LED_OFF(self):
+        GPIO.output(self.pin,GPIO.LOW)    
+    def LED_TOGGLE(self):
+        GPIO.output(self.pin,not GPIO.input(self.pin))
+    
+if __name__ == '__main__':
+    try:
+        #클래쓰 생성
+        test = LEDCntl(GPIO.BCM,24)
+        while True:
+            test.LED_ON()
+            time.sleep(0.1)
+            test.LED_OFF()
+            time.sleep(0.1)
+    except KeyboardInterrupt:
+        print("except")
+    finally:
+        print("cleanup")
+        GPIO.cleanup()
