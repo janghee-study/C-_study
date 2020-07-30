@@ -1,0 +1,660 @@
+/////////////////////////////////////////////////
+#5.1 QPushButton
+import sys
+from PyQt5.QtWidgets import *
+import time
+class MyApp(QWidget):
+
+    def __init__(self):
+        super().__init__()
+        self.initUI()
+
+    def initUI(self):
+        self.btn1 = QPushButton('Button&1', self)
+        self.btn1.setCheckable(True)
+        self.btn1.toggled.connect(self.btn3_enable)
+
+        self.btn2 = QPushButton(self)
+        self.btn2.clicked.connect(self.btn1_toggle)
+        self.btn2.setText('button&2')
+
+        self.btn3 = QPushButton('Button&3',self)
+        self.btn3.setEnabled(False)
+
+        vbox = QVBoxLayout()
+        vbox.addWidget(self.btn1)
+        vbox.addWidget(self.btn2)
+        vbox.addWidget(self.btn3)
+
+        self.setLayout(vbox)
+
+        self.setWindowTitle('QGridLayout')
+        self.setGeometry(300, 300, 300, 200)
+        self.show()
+
+    #2번 버튼을 눌렀을 떄 토글되도록
+    def btn1_toggle(self):
+        self.btn1.toggle()
+
+    def btn3_enable(self):
+        print(self.btn3.isEnabled())
+        if self.btn3.isEnabled() == True:
+            self.btn3.setEnabled(False)
+        else:
+            self.btn3.setEnabled(True)
+
+
+if __name__ == '__main__':
+        app = QApplication(sys.argv)
+        ex = MyApp()
+        sys.exit(app.exec_())
+/////////////////////////////////////////////////
+#5.1 수정
+import sys
+from PyQt5.QtWidgets import *
+from PyQt5.QtGui import QIcon
+
+import time
+class MyApp(QWidget):
+
+    def __init__(self):
+        super().__init__()
+        self.initUI()
+
+    def initUI(self):
+        self.btn1 = QPushButton('Button&1', self)
+        self.btn1.setCheckable(True)
+        self.btn1.toggled.connect(self.btn3_enable)
+        self.btn1.setIcon(QIcon('image/web.png'))
+
+        self.btn2 = QPushButton(self)
+        self.btn2.clicked.connect(self.btn1_toggle)
+        self.btn2.setText('button&2')
+
+        self.btn3 = QPushButton('Button&3',self)
+        self.btn3.setEnabled(False)
+
+        vbox = QVBoxLayout()
+        vbox.addWidget(self.btn1)
+        vbox.addWidget(self.btn2)
+        vbox.addWidget(self.btn3)
+
+        self.setLayout(vbox)
+
+        self.setWindowTitle('QGridLayout')
+        self.setGeometry(300, 300, 300, 200)
+        self.show()
+
+    #2번 버튼을 눌렀을 떄 토글되도록
+    def btn1_toggle(self):
+        self.btn1.toggle()
+
+    def btn3_enable(self):
+        # print(self.btn3.isEnabled())
+        if self.btn3.isEnabled() == True:
+            self.btn3.setEnabled(False)
+        else:
+            self.btn3.setEnabled(True)
+
+
+if __name__ == '__main__':
+        app = QApplication(sys.argv)
+        ex = MyApp()
+        sys.exit(app.exec_())
+/////////////////////////////////////////////////
+#5.2 QLabel
+import sys
+from PyQt5.QtWidgets import *
+from PyQt5.QtCore import Qt
+import time
+class MyApp(QWidget):
+
+    def __init__(self):
+        super().__init__()
+        self.initUI()
+
+    def initUI(self):
+        label1 = QLabel('First_Label',self)
+        label1.setAlignment(Qt.AlignCenter)
+
+        label2 = QLabel('Second_Label', self)
+        label2.setAlignment(Qt.AlignCenter)
+
+        font1 = label1.font()
+        font1.setPointSize(20)
+        label1.setFont(font1)
+
+        font2 = label1.font()
+        font2.setPointSize(20)
+        font2.setBold(True)
+        label2.setFont(font2)
+
+        #위젯 배치
+        layout = QVBoxLayout()
+        layout.addWidget(label1)
+        layout.addWidget(label2)
+        self.setLayout(layout)
+
+        self.setWindowTitle('QGridLayout')
+        self.setGeometry(300, 300, 300, 200)
+        self.show()
+
+
+if __name__ == '__main__':
+        app = QApplication(sys.argv)
+        ex = MyApp()
+        sys.exit(app.exec_())
+/////////////////////////////////////////////////
+#Q5.3 CheckBox
+import sys
+from PyQt5.QtWidgets import QApplication, QWidget, QCheckBox
+from PyQt5.QtCore import Qt
+
+
+class MyApp(QWidget):
+
+    def __init__(self):
+        super().__init__()
+        self.initUI()
+
+    def initUI(self):
+        #TO DO
+        cb = QCheckBox('SHOW TITLE',self)
+        cb.move(20,20)
+        cb.toggle()
+        #위젯 배치
+        self.setWindowTitle('QCheckBox')
+        self.setGeometry(300, 300, 300, 200)
+        self.show()
+        #시그널 & 슬롯설정
+        cb.stateChanged.connect(self.changeTitle)
+        #강사님은 시그널을 다른곳으로 빼서 구분지어줌
+
+    def changeTitle(self,state):
+        if state == Qt.Checked:
+            self.setWindowTitle('QCheckBox')
+        else:
+            self.setWindowTitle('NO check')
+
+
+
+    def changeTitle(self, state):
+        if state == Qt.Checked:
+            self.setWindowTitle('QCheckBox')
+        else:
+            self.setWindowTitle(' ')
+
+
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    ex = MyApp()
+    sys.exit(app.exec_())
+/////////////////////////////////////////////////
+#5.3 QCheckBox 수정
+import sys
+from PyQt5.QtWidgets import *
+from PyQt5.QtCore import Qt
+
+
+class MyApp(QWidget):
+
+    def __init__(self):
+        super().__init__()
+        self.initUI()
+
+    def initUI(self):
+        #위젯 생성(지금은 지역변수상태)-->self.을 항상붙여야 밖에서 접근가능
+        cb1 = QCheckBox("show title")
+        cb1.setTristate()
+        cb2 = QCheckBox("title")
+        self.lbl = QLabel()
+        #위젯 배치
+        grid = QGridLayout()
+        self.setLayout(grid)
+        grid.addWidget(cb1, 0, 0)
+        grid.addWidget(cb2, 1, 0)
+        grid.addWidget((self.lbl),1,1)
+        #윈도우설정
+        self.setWindowTitle('QCheckBox')
+        self.setGeometry(300, 300, 300, 200)
+        self.show()
+        #시그널 & 슬롯설정
+        cb2.stateChanged.connect(self.changelbl)
+        #강사님은 시그널을 다른곳으로 빼서 구분지어줌
+
+    def changelbl(self, state):
+        if state == Qt.Checked:
+            self.lbl.setText('check')
+        else:
+            self.lbl.setText(' ')
+
+
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    ex = MyApp()
+    sys.exit(app.exec_())
+/////////////////////////////////////////////////
+#5.3 QCheckBox 수정
+import sys
+from PyQt5.QtWidgets import *
+from PyQt5.QtCore import Qt
+
+
+class MyApp(QWidget):
+
+    def __init__(self):
+        super().__init__()
+        self.initUI()
+
+    def initUI(self):
+        #위젯 생성(지금은 지역변수상태)-->self.을 항상붙여야 밖에서 접근가능
+        cb1 = QCheckBox("show title")
+        cb1.setTristate()
+        cb2 = QCheckBox("title")
+        cb2.setTristate()
+        self.lbl1 = QLabel()
+        self.lbl2 = QLabel()
+        #위젯 배치
+        grid = QGridLayout()
+        self.setLayout(grid)
+        grid.addWidget(cb1, 0, 0)
+        grid.addWidget(cb2, 1, 0)
+        grid.addWidget((self.lbl1),0,1)
+        grid.addWidget((self.lbl2),1,1)
+        #윈도우설정
+        self.setWindowTitle('QCheckBox')
+        self.setGeometry(300, 300, 300, 200)
+        self.show()
+        #시그널 & 슬롯설정
+        cb1.stateChanged.connect(self.changelbl)
+        cb2.stateChanged.connect(self.changelbl)
+        #강사님은 시그널을 다른곳으로 빼서 구분지어줌
+
+    def changelbl(self, state):
+        if state == Qt.Checked:
+            self.lbl.setText('check')
+        elif state == Qt.PartiallyChecked:
+            self.lbl.setText('uncheck')
+        else:
+            self.lbl.setText(' ')
+
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    ex = MyApp()
+    sys.exit(app.exec_())
+/////////////////////////////////////////////////
+#5.4 QRadioButton
+import sys
+from PyQt5.QtWidgets import *
+
+class MyApp(QWidget):
+
+    def __init__(self):
+        super().__init__()
+        self.initUI()
+
+    def initUI(self):
+        rbtn1 = QRadioButton('First Button', self)
+
+        rbtn1.setChecked(True) #여기가 관건
+        rbtn2 = QRadioButton('Second Button',self)
+        rbtn3 = QRadioButton('Third Button',self)
+        rbtn3.setAutoExclusive(False) #따로 놀게하기
+
+        vbox = QVBoxLayout()
+        vbox.addWidget(rbtn1)
+        vbox.addWidget(rbtn2)
+        vbox.addWidget(rbtn3)
+        self.setLayout(vbox)
+
+        self.setGeometry(300, 300, 300, 200)
+        self.setWindowTitle('QRadioButton')
+        self.show()
+
+
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    ex = MyApp()
+    sys.exit(app.exec_())
+/////////////////////////////////////////////////
+#5.4 QRadioButton 수정
+import sys
+from PyQt5.QtWidgets import *
+
+class MyApp(QWidget):
+
+    def __init__(self):
+        super().__init__()
+        self.initUI()
+
+    def initUI(self):
+        self.rbtn1 = QRadioButton('First Button', self)
+        self.rbtn1.setChecked(True)
+        self.rbtn2 = QRadioButton('Second Button',self)
+        self.rbtn3 = QRadioButton('Third Button',self)
+        self.btn1 = QPushButton('SELECT',self)
+        self.lbl2 = QLabel('F/S/T',self)
+
+        hbox1 = QHBoxLayout()
+        hbox1.addWidget(self.rbtn1)
+        hbox1.addWidget(self.btn1)
+
+        hbox2 = QHBoxLayout()
+        hbox2.addWidget(self.rbtn3)
+        hbox2.addWidget(self.lbl2)
+
+        vbox = QVBoxLayout()
+        vbox.addLayout(hbox1)
+        vbox.addWidget(self.rbtn2)
+        vbox.addLayout(hbox2)
+        self.setLayout(vbox)
+
+        self.btn1.clicked.connect(self.Check_status)
+        #실행구문
+        self.setGeometry(300, 300, 300, 200)
+        self.setWindowTitle('QRadioButton')
+        self.show()
+
+    def Check_status(self):
+        # print(self.rbtn1.isChecked())
+        # print(self.rbtn2.isChecked())
+        # print(self.rbtn3.isChecked())
+        if self.rbtn1.isChecked() == True:
+            self.lbl2.setText("FFFF")
+        elif self.rbtn2.isChecked() == True:
+            self.lbl2.setText("SSSS")
+        else:
+            self.lbl2.setText("TTTT")
+
+
+
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    ex = MyApp()
+    sys.exit(app.exec_())
+/////////////////////////////////////////////////
+#5.5 ComboBox
+import sys
+from PyQt5.QtWidgets import*
+
+class MyApp(QWidget):
+
+    def __init__(self):
+        super().__init__()
+        self.initUI()
+
+    def initUI(self):
+        self.lbl = QLabel('Option1', self)
+        self.lbl.move(50, 150)
+
+        cb = QComboBox(self)
+        cb.addItem('Option1')
+        cb.addItem('Option2')
+        cb.addItem('Option3')
+        cb.addItem('Option4')
+        cb.move(50, 50)
+
+        cb.activated[str].connect(self.onActivated)
+
+        self.setWindowTitle('QComboBox')
+        self.setGeometry(300, 300, 300, 200)
+        self.show()
+
+    def onActivated(self, text):
+        self.lbl.setText(text)
+        self.lbl.adjustSize()
+
+
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    ex = MyApp()
+    sys.exit(app.exec_())
+/////////////////////////////////////////////////
+#5.6 QLineEdit
+import sys
+from PyQt5.QtWidgets import*
+
+class MyApp(QWidget):
+
+    def __init__(self):
+        super().__init__()
+        self.initUI()
+
+    def initUI(self):
+
+        #위젯생성
+        self.lbl = QLabel(self)
+        self.lbl.move(60,40)
+
+        self.qle = QLineEdit(self)
+        self.qle.move(60,100)
+
+        #위젯배치
+
+        #시그널 & 슬롯 생성
+        # qle.textChanged[str].connect(self.onChanged)      #1
+        self.qle.returnPressed.connect(self.onChanged)
+
+        #윈도우 설정
+        self.setGeometry(300, 300, 300, 200)
+        self.setWindowTitle('QCheckBox')
+        self.show()
+
+    # def onChanged(self,text):     #1
+    #     self.lbl.setText(text)
+    #     self.lbl.adjustSize()
+
+    #엔터한번에 업데이트
+    def onChanged(self):
+
+        self.lbl.setText(self.qle.text())
+        self.lbl.adjustSize()
+
+
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    ex = MyApp()
+    sys.exit(app.exec_())
+/////////////////////////////////////////////////
+#Qt designer 사용 --> 만들어진 test.ui파일 사용
+import sys
+from PyQt5.QtWidgets import *
+from PyQt5 import uic
+
+form_class = uic.loadUiType("./test.ui")[0]
+
+class Mywindow(QWidget,form_class):
+    def __init__(self):
+        super().__init__()
+        self.setupUi(self)
+        
+if __name__ == "__main__":
+    app =QApplication(sys.argv)
+    ex = Mywindow()
+    btn1 = QPushButton('BUTTON',ex)
+    ex.verticalLayout.addWidget(btn1)
+    ex.show()
+    sys.exit(app.exec_())
+/////////////////////////////////////////////////
+#Quiz
+import sys
+from PyQt5.QtWidgets import *
+from PyQt5.QtCore import Qt
+
+
+class MyApp(QWidget):
+
+    def __init__(self):
+        super().__init__()
+        self.initUI()
+
+    def initUI(self):
+        #위젯 생성(지금은 지역변수상태)-->self.을 항상붙여야 밖에서 접근가능
+        cb1 = QCheckBox("show title")
+        cb1.setTristate()
+        cb2 = QCheckBox("title")
+        self.lbl = QLabel()
+        #위젯 배치
+        grid = QGridLayout()
+        self.setLayout(grid)
+        grid.addWidget(cb1, 0, 0)
+        grid.addWidget(cb2, 1, 0)
+        grid.addWidget((self.lbl),1,1)
+        #윈도우설정
+        self.setWindowTitle('QCheckBox')
+        self.setGeometry(300, 300, 300, 200)
+        self.show()
+        #시그널 & 슬롯설정
+        cb2.stateChanged.connect(self.changelbl)
+        #강사님은 시그널을 다른곳으로 빼서 구분지어줌
+
+    def changelbl(self, state):
+        if state == Qt.Checked:
+            self.lbl.setText('check')
+        else:
+            self.lbl.setText(' ')
+
+
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    ex = MyApp()
+    sys.exit(app.exec_())
+/////////////////////////////////////////////////
+#Radiobutton_Quiz
+#QRadioButtonTest
+import sys
+from PyQt5.QtWidgets import *
+from LED_Ctrl import *
+
+def LED_Toggle(a):
+    if a==1: 
+        LED1.LED_TOGGLE()
+    elif a==2:
+        LED2.LED_TOGGLE()
+    elif a==3:
+        LED3.LED_TOGGLE()
+
+
+class MyApp(QWidget):
+
+    def __init__(self):
+        super().__init__()
+        self.initUI()
+
+    def initUI(self):
+        self.rbtn1 = QRadioButton('LED1 Button', self)
+        self.rbtn1.setChecked(True)
+        self.rbtn2 = QRadioButton('LED2 Button',self)
+        self.rbtn3 = QRadioButton('LED3 Button',self)
+        self.btn1 = QPushButton('ON&OFF',self)
+        self.lbl2 = QLabel('CHECK',self)
+        self.flag1=True
+        self.flag2=True
+        self.flag3=True
+        hbox1 = QHBoxLayout()
+        hbox1.addWidget(self.rbtn1)
+        hbox1.addWidget(self.btn1)
+
+        hbox2 = QHBoxLayout()
+        hbox2.addWidget(self.rbtn3)
+        hbox2.addWidget(self.lbl2)
+
+        vbox = QVBoxLayout()
+        vbox.addLayout(hbox1)
+        vbox.addWidget(self.rbtn2)
+        vbox.addLayout(hbox2)
+        self.setLayout(vbox)
+
+        self.btn1.clicked.connect(self.Check_status)
+        #실행구문
+        self.setGeometry(300, 300, 300, 200)
+        self.setWindowTitle('QRadioButton')
+        self.show()
+
+    def Check_status(self):
+        if self.rbtn1.isChecked() == True:
+            if self.flag1 == True:    
+                self.lbl2.setText("LED1 ON")
+                LED_Toggle(1)
+                self.flag1 = False
+                
+            elif self.flag1 == False:
+                self.lbl2.setText("LED1 OFF")
+                LED_Toggle(1)
+                self.flag1 = True
+                
+                
+                
+        elif self.rbtn2.isChecked() == True:
+            if self.flag2 == True:    
+                self.lbl2.setText("LED2 ON")
+                LED_Toggle(2)
+                self.flag2 = False
+                
+            elif self.flag2 == False:
+                self.lbl2.setText("LED2 OFF")
+                LED_Toggle(2)
+                self.flag2 = True
+                
+                
+        else:
+            if self.flag3 == True:    
+                self.lbl2.setText("LED3 ON")
+                LED_Toggle(3)
+                self.flag3 = False
+                
+            elif self.flag3 == False:
+                self.lbl2.setText("LED3 OFF")
+                LED_Toggle(3)
+                self.flag3 = True
+
+
+
+if __name__ == '__main__':
+    try:
+        LED1 = LEDCntl(GPIO.BCM,17)#1번
+        LED2 = LEDCntl(GPIO.BCM,27)#2번
+        LED3 = LEDCntl(GPIO.BCM,22)#3번
+        
+        app = QApplication(sys.argv)
+        ex = MyApp()
+        sys.exit(app.exec_())
+    except KeyboardInterrupt:
+        print("except")
+    finally:
+        print("cleanup")
+        GPIO.cleanup()
+/////////////////////////////LED제어클래쓰/////////////
+import RPi.GPIO as GPIO
+import time
+
+class LEDCntl:
+    def __init__(self,mode,pin):
+        self.pin = pin
+        self.mode = mode
+        
+        GPIO.setmode(mode)
+        GPIO.setup(pin,GPIO.OUT)
+        
+    def LED_ON(self):
+        GPIO.output(self.pin,GPIO.HIGH)
+        
+    def LED_OFF(self):
+        GPIO.output(self.pin,GPIO.LOW)    
+    def LED_TOGGLE(self):
+        GPIO.output(self.pin,not GPIO.input(self.pin))
+    
+if __name__ == '__main__':
+    try:
+        #클래쓰 생성
+        test = LEDCntl(GPIO.BCM,24)
+        while True:
+            test.LED_ON()
+            time.sleep(0.1)
+            test.LED_OFF()
+            time.sleep(0.1)
+    except KeyboardInterrupt:
+        print("except")
+    finally:
+        print("cleanup")
+        GPIO.cleanup()
