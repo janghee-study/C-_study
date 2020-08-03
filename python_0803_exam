@@ -1,0 +1,62 @@
+#download_exam.py
+import urllib.request
+
+url = "http://az879543.vo.msecnd.net/itzy/20200309_s_24.jpg"
+savename = "itzy02.png"
+
+urllib.request.urlretrieve(url,savename)
+print("SAVE!!!")
+
+
+#download_ip.py
+import urllib.request
+
+#HTML소스코드 가져오기
+url = "http://www.naver.com"
+res = urllib.request.urlopen(url)
+data = res.read()
+
+#바이너리를 문자열로 변환하기
+# text = data.decode('utf-8')
+# print(text)
+
+# 다운로드
+# mem = urllib.request.urlopen(url).read()
+
+#예외처리
+savename = 'naver.txt'
+with open(savename,mode="wb") as f:
+    f.write(data) 
+    print('저장되었습니다.')
+
+
+#download_exam_arr01.py
+import urllib.request
+
+url = ["http://az879543.vo.msecnd.net/itzy/20200309_s_1.jpg","http://az879543.vo.msecnd.net/itzy/20200309_s_2.jpg","http://az879543.vo.msecnd.net/itzy/20200309_s_3.jpg","http://az879543.vo.msecnd.net/itzy/20200309_s_4.jpg"]
+
+savename = ["itzy05.png","itzy02.png","itzy03.png","itzy04.png"]
+
+print("SAVE!!!")
+
+for i in range(0,4):
+    urllib.request.urlretrieve(url[i],savename[i])
+
+print("SAVE!!!")
+
+
+#download_exam_arr02.py
+import urllib.request
+
+url=list()
+savename=list() 
+
+#자동화작업
+for i in range(1,5):
+    url.append(f'http://az879543.vo.msecnd.net/itzy/20200309_{i+10:02d}.jpg')
+    savename.append(f'itzy{i:03d}.jpg')
+
+for i in range(0,4):
+    urllib.request.urlretrieve(url[i],savename[i])
+
+print("SAVE!!!")
